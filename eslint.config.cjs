@@ -31,6 +31,11 @@ module.exports = tseslint.config(
       react: {
         version: 'detect',
       },
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
     },
     rules: {
       'import/no-unresolved': 'off',
