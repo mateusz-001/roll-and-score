@@ -1,1 +1,1 @@
-# Roll & score - dice roll app
+# Roll & score - dice roll scoring app
