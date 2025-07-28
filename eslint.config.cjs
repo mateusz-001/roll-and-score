@@ -1,6 +1,7 @@
 const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const prettier = require('eslint-config-prettier');
+const globals = require('globals');
 
 module.exports = tseslint.config(
   {
@@ -13,11 +14,10 @@ module.exports = tseslint.config(
         ecmaFeatures: {
           jsx: true,
         },
+        project: undefined,
       },
       globals: {
-        document: 'readonly',
-        window: 'readonly',
-        navigator: 'readonly',
+        ...globals.browser,
       },
     },
     plugins: {
