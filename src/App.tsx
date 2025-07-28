@@ -1,11 +1,11 @@
 import './App.css';
-
+import { Button } from './components/Button';
 import { Heading } from './components/Heading';
 import { Paragraph } from './components/Paragraph';
 
 function App() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col items-center gap-4">
       <Heading level="h1">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h2">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h3">Vite + React + TypeScript + Tailwind CSS</Heading>
@@ -39,6 +39,46 @@ function App() {
       <Paragraph as="span" size="small" color="accent" weight="normal">
         This is a small span paragraph with accent color and normal weight.
       </Paragraph>
+      <Button variant="primary">Primary Button</Button>
+      <Button variant="secondary">Secondary Button</Button>
+      <Button variant="ghost">Ghost Button</Button>
+      <Button variant="danger">Danger Button</Button>
+      <Button variant="primary" size="lg">
+        Primary Button
+      </Button>
+      <Button variant="secondary" size="lg">
+        Secondary Button
+      </Button>
+      <Button variant="ghost" size="lg">
+        Ghost Button
+      </Button>
+      <Button variant="danger" size="lg">
+        Danger Button
+      </Button>
+      <Button variant="primary" isLoading>
+        Loading Button
+      </Button>
+      <Button variant="secondary" isLoading>
+        Loading Button
+      </Button>
+      <Button variant="ghost" isLoading>
+        Loading Button
+      </Button>
+      <Button variant="danger" isLoading>
+        Loading Button
+      </Button>
+      <Button variant="primary" size="sm">
+        Small Primary Button
+      </Button>
+      <Button variant="secondary" size="sm">
+        Small Secondary Button
+      </Button>
+      <Button variant="ghost" size="sm">
+        Small Ghost Button
+      </Button>
+      <Button variant="danger" size="sm">
+        Small Danger Button
+      </Button>
     </div>
   );
 }
