@@ -27,6 +27,7 @@ export default {
         'body-base': ['1rem', { lineHeight: '1.5rem' }], // 16px
         'body-sm': ['0.875rem', { lineHeight: '1.25rem' }], // 14px
         'body-xs': ['0.75rem', { lineHeight: '1rem' }], // 12px
+        'body-xxs': ['0.625rem', { lineHeight: '1rem' }], // 10px
       },
       borderRadius: {
         sm: '0.5rem',
