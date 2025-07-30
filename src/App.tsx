@@ -1,9 +1,13 @@
+import { useForm } from 'react-hook-form';
 import './App.css';
 import { Button } from './components/Button';
 import { Heading } from './components/Heading';
+import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
 
 function App() {
+  const { control } = useForm<{ email: string }>();
+
   return (
     <div className="flex flex-col items-center gap-4">
       <Heading level="h1">Vite + React + TypeScript + Tailwind CSS</Heading>
@@ -79,6 +83,14 @@ function App() {
       <Button variant="danger" size="sm">
         Small Danger Button
       </Button>
+      <Input
+        name="example"
+        control={control}
+        label="Example Input"
+        placeholder="Type something..."
+        className="mt-4"
+        required
+      />
     </div>
   );
 }
