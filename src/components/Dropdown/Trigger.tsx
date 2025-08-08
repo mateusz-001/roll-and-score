@@ -7,7 +7,7 @@ import { ButtonLikeProps } from './types';
 type TriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean };
 
 export function Trigger({ asChild, children, ...props }: TriggerProps) {
-  const { open, setOpen, triggerRef, menuId } = useDropdown();
+  const { open, setOpen, triggerRef, menuId, setPendingFocus } = useDropdown();
 
   if (asChild && React.isValidElement<ButtonLikeProps>(children)) {
     const childRef = (children as unknown as { ref?: React.Ref<HTMLButtonElement> }).ref;
@@ -31,6 +31,12 @@ export function Trigger({ asChild, children, ...props }: TriggerProps) {
         e => {
           if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            setPendingFocus('first');
+            setOpen(true);
+          }
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setPendingFocus('last');
             setOpen(true);
           }
         },

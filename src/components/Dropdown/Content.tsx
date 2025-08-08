@@ -21,8 +21,18 @@ export function Content({
   side = 'bottom',
   offset = 6,
 }: ContentProps) {
-  const { open, setOpen, triggerRef, menuRef, focusItem, setFocusedIndex, menuId } = useDropdown();
+  const {
+    open,
+    setOpen,
+    triggerRef,
+    menuRef,
+    setFocusedIndex,
+    menuId,
+    pendingFocus,
+    setPendingFocus,
+  } = useDropdown();
 
+  // proste pozycjonowanie względem triggera
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
   React.useLayoutEffect(() => {
     const t = triggerRef?.current,
@@ -51,23 +61,31 @@ export function Content({
     setStyles({ position: 'absolute', top, left, minWidth: tRect.width });
   }, [open, align, side, offset, triggerRef, menuRef]);
 
+  // focus po otwarciu + intencja z Triggera
   React.useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (!open) return;
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        setOpen(false);
-        triggerRef?.current?.focus();
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        focusItem(0);
-      }
-    }
-    document.addEventListener('keydown', onKey);
+    if (!open) return;
 
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, setOpen, focusItem, triggerRef]);
+    // przejmij fokus na kontener
+    menuRef?.current?.focus();
+
+    if (!pendingFocus) return;
+
+    const focusByIntent = () => {
+      const items = Array.from(
+        menuRef?.current?.querySelectorAll<HTMLDivElement>(
+          '[data-rs-menuitem]:not([aria-disabled="true"])',
+        ) ?? [],
+      );
+      if (!items.length) return;
+      const index = pendingFocus === 'first' ? 0 : items.length - 1;
+      items[index]?.focus();
+      setFocusedIndex(index);
+      setPendingFocus(null);
+    };
+
+    // podwójny rAF, żeby mieć pewność że itemy są zamontowane
+    requestAnimationFrame(() => requestAnimationFrame(focusByIntent));
+  }, [open, pendingFocus, setPendingFocus, setFocusedIndex, menuRef]);
 
   return (
     <AnimatePresence>
@@ -78,50 +96,64 @@ export function Content({
           role="menu"
           id={menuId}
           aria-orientation="vertical"
-          initial={{ opacity: 0, scale: 0.98, y: -4 }}
+          initial={{ opacity: 0, scale: 0.9, y: -15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.98, y: -4 }}
-          transition={{ duration: 0.12, ease: 'easeOut' }}
+          exit={{ opacity: 0, scale: 0.9, y: -15 }}
+          transition={{
+            opacity: { duration: 0.2, ease: 'easeInOut' },
+            scale: { type: 'spring', stiffness: 500 },
+            y: { type: 'spring', stiffness: 500 },
+          }}
           style={styles}
           className={cn(
-            'z-50 rounded-lg border border-gray bg-white text-text shadow-xl',
-            'dark:bg-dark-card dark:text-white dark:border-dark-gray',
-            'p-1 outline-none',
+            'z-50 rounded-lg shadow-xl',
+            'bg-white border-2 border-primary text-light',
+            'p-2 outline-none md:p-2.5',
             className,
           )}
           tabIndex={-1}
           onKeyDown={e => {
-            const container = menuRef?.current!;
             const items = Array.from(
-              container.querySelectorAll<HTMLDivElement>(
-                '[role="menuitem"]:not([aria-disabled="true"])',
-              ),
+              menuRef?.current?.querySelectorAll<HTMLDivElement>(
+                '[data-rs-menuitem]:not([aria-disabled="true"])',
+              ) ?? [],
             );
+            if (!items.length) return;
+
+            const idxNow = items.findIndex(el => el === document.activeElement);
+
+            const focusAt = (i: number) => {
+              const clamped = (i + items.length) % items.length;
+              items[clamped]?.focus();
+              setFocusedIndex(clamped);
+            };
+
             if (e.key === 'ArrowDown') {
               e.preventDefault();
-              const idx = items.findIndex(el => el === document.activeElement);
-              const next = idx < items.length - 1 ? idx + 1 : 0;
-              (items[next] as HTMLDivElement)?.focus();
-              setFocusedIndex(next);
+              focusAt(idxNow < 0 ? 0 : idxNow + 1);
             }
             if (e.key === 'ArrowUp') {
               e.preventDefault();
-              const idx = items.findIndex(el => el === document.activeElement);
-              const prev = idx > 0 ? idx - 1 : items.length - 1;
-              (items[prev] as HTMLDivElement)?.focus();
-              setFocusedIndex(prev);
+              focusAt(idxNow < 0 ? items.length - 1 : idxNow - 1);
             }
             if (e.key === 'Home') {
               e.preventDefault();
-              (items[0] as HTMLDivElement)?.focus();
-              setFocusedIndex(0);
+              focusAt(0);
             }
             if (e.key === 'End') {
               e.preventDefault();
-              (items[items.length - 1] as HTMLDivElement)?.focus();
-              setFocusedIndex(items.length - 1);
+              focusAt(items.length - 1);
             }
-            if (e.key === 'Tab') setOpen(false);
+            if (e.key === 'Tab') {
+              e.preventDefault();
+              if (e.shiftKey) focusAt(idxNow < 0 ? items.length - 1 : idxNow - 1);
+              else focusAt(idxNow < 0 ? 0 : idxNow + 1);
+            }
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              setOpen(false);
+              requestAnimationFrame(() => triggerRef?.current?.focus());
+            }
           }}
         >
           {children}

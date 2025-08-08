@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { PendingFocus } from './types';
+
 type DropdownContextValue = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +13,8 @@ type DropdownContextValue = {
   setFocusedIndex: (i: number) => void;
   onItemSelect: () => void;
   menuId: string;
+  pendingFocus: PendingFocus;
+  setPendingFocus: React.Dispatch<React.SetStateAction<PendingFocus>>;
 };
 
 export const DropdownCtx = React.createContext<DropdownContextValue | null>(null);

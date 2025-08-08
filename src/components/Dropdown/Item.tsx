@@ -27,9 +27,9 @@ export function Item({ children, onSelect, disabled, className }: ItemProps) {
       tabIndex={disabled ? undefined : -1}
       aria-disabled={disabled || undefined}
       className={cn(
-        'flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-sm outline-none',
-        'focus:bg-gray/30 hover:bg-gray/30',
-        'dark:focus:bg-white/10 dark:hover:bg-white/10',
+        'flex cursor-pointer select-none items-center rounded-md px-2 py-1 text-sm text-text font-medium font-body outline-none md:px-3 md:py-2',
+        'duration-300 transform-gpu ease-in-out origin-center',
+        'focus:bg-primary focus:text-white focus:scale-105 hover:bg-primary hover:text-white hover:scale-105',
         disabled ? 'pointer-events-none opacity-50' : '',
         className,
       )}

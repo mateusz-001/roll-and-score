@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import './App.css';
 import { Button } from './components/Button';
-import * as Dropdown from './components/Dropdown';
+import { Content, Dropdown, Item, Label, Separator, Trigger } from './components/Dropdown';
 import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
@@ -93,20 +93,20 @@ function App() {
         className="mt-4"
         required
       />
-      <Dropdown.Dropdown>
-        <Dropdown.Trigger asChild>
-          <Button>Menu</Button>
-        </Dropdown.Trigger>
+      <Dropdown>
+        <Trigger asChild>
+          <Button variant="primary">Menu</Button>
+        </Trigger>
 
-        <Dropdown.Content align="start" side="bottom" offset={8} className="w-56">
-          <Dropdown.Label>Actions</Dropdown.Label>
-          <Dropdown.Item onSelect={() => alert('New file')}>New File</Dropdown.Item>
-          <Dropdown.Item onSelect={() => alert('Save as…')}>Save as…</Dropdown.Item>
-          <Dropdown.Separator />
-          <Dropdown.Item disabled>Disabled item</Dropdown.Item>
-          <Dropdown.Item onSelect={() => alert('Logout')}>Logout</Dropdown.Item>
-        </Dropdown.Content>
-      </Dropdown.Dropdown>
+        <Content side="bottom" align="start" offset={8} className="w-56">
+          <Label>Quick actions</Label>
+          <Item onSelect={() => console.log('New file')}>New file</Item>
+          <Item onSelect={() => console.log('Duplicate')}>Duplicate</Item>
+          <Separator />
+          <Item disabled>Disabled option</Item>
+          <Item onSelect={() => console.log('Logout')}>Logout</Item>
+        </Content>
+      </Dropdown>
     </div>
   );
 }

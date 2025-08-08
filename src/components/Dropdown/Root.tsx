@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { DropdownCtx } from './context';
 import { useOutsideClick } from './helpers';
-import type { DropdownContextValue } from './types';
+import type { DropdownContextValue, PendingFocus } from './types';
 
 export function Dropdown({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
@@ -11,6 +11,7 @@ export function Dropdown({ children }: { children: React.ReactNode }) {
 
   const itemsRef = React.useRef<HTMLDivElement[]>([]);
   const [focusedIndex, setFocusedIndex] = React.useState(-1);
+  const [pendingFocus, setPendingFocus] = React.useState<PendingFocus>(null);
   const menuId = React.useId();
 
   const registerItem = (el: HTMLDivElement | null) => {
@@ -49,6 +50,8 @@ export function Dropdown({ children }: { children: React.ReactNode }) {
     setFocusedIndex,
     onItemSelect,
     menuId,
+    pendingFocus,
+    setPendingFocus,
   };
 
   return <DropdownCtx.Provider value={value}>{children}</DropdownCtx.Provider>;
