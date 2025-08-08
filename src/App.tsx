@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
+
 import './App.css';
 import { Button } from './components/Button';
+import { Content, Dropdown, Item, Label, Separator, Trigger } from './components/Dropdown';
 import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
@@ -9,7 +11,7 @@ function App() {
   const { control } = useForm<{ email: string }>();
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 mb-48">
       <Heading level="h1">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h2">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h3">Vite + React + TypeScript + Tailwind CSS</Heading>
@@ -91,6 +93,20 @@ function App() {
         className="mt-4"
         required
       />
+      <Dropdown>
+        <Trigger asChild>
+          <Button variant="primary">Menu</Button>
+        </Trigger>
+
+        <Content side="bottom" align="start" offset={8} className="w-56">
+          <Label>Quick actions</Label>
+          <Item onSelect={() => console.log('New file')}>New file</Item>
+          <Item onSelect={() => console.log('Duplicate')}>Duplicate</Item>
+          <Separator />
+          <Item disabled>Disabled option</Item>
+          <Item onSelect={() => console.log('Logout')}>Logout</Item>
+        </Content>
+      </Dropdown>
     </div>
   );
 }
