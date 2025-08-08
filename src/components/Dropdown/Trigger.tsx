@@ -1,4 +1,7 @@
+import { ChevronDown } from 'lucide-react';
 import React from 'react';
+
+import { cn } from '@/utils';
 
 import { useDropdown } from './context';
 import { composeEventHandlers, mergeRefs } from './helpers';
@@ -6,7 +9,7 @@ import { ButtonLikeProps } from './types';
 
 type TriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean };
 
-export function Trigger({ asChild, children, ...props }: TriggerProps) {
+export const Trigger = ({ asChild, children, ...props }: TriggerProps) => {
   const { open, setOpen, triggerRef, menuId, setPendingFocus } = useDropdown();
 
   if (asChild && React.isValidElement<ButtonLikeProps>(children)) {
@@ -43,6 +46,12 @@ export function Trigger({ asChild, children, ...props }: TriggerProps) {
       ),
 
       type: child.props.type ?? 'button',
+      children: (
+        <>
+          {child.props.children}
+          <ChevronDown size={16} className={cn('ml-1', open ? 'rotate-180' : '')} />
+        </>
+      ),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   }
@@ -69,4 +78,4 @@ export function Trigger({ asChild, children, ...props }: TriggerProps) {
       {children}
     </button>
   );
-}
+};
