@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
+
 import './App.css';
 import { Button } from './components/Button';
+import * as Dropdown from './components/Dropdown';
 import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
@@ -9,7 +11,7 @@ function App() {
   const { control } = useForm<{ email: string }>();
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 mb-48">
       <Heading level="h1">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h2">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h3">Vite + React + TypeScript + Tailwind CSS</Heading>
@@ -91,6 +93,20 @@ function App() {
         className="mt-4"
         required
       />
+      <Dropdown.Dropdown>
+        <Dropdown.Trigger asChild>
+          <Button>Menu</Button>
+        </Dropdown.Trigger>
+
+        <Dropdown.Content align="start" side="bottom" offset={8} className="w-56">
+          <Dropdown.Label>Actions</Dropdown.Label>
+          <Dropdown.Item onSelect={() => alert('New file')}>New File</Dropdown.Item>
+          <Dropdown.Item onSelect={() => alert('Save as…')}>Save as…</Dropdown.Item>
+          <Dropdown.Separator />
+          <Dropdown.Item disabled>Disabled item</Dropdown.Item>
+          <Dropdown.Item onSelect={() => alert('Logout')}>Logout</Dropdown.Item>
+        </Dropdown.Content>
+      </Dropdown.Dropdown>
     </div>
   );
 }
