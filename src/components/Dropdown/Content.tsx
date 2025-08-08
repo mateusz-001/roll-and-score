@@ -14,13 +14,13 @@ type ContentProps = {
   offset?: number;
 };
 
-export function Content({
+export const Content = ({
   children,
   className,
   align = 'start',
   side = 'bottom',
   offset = 6,
-}: ContentProps) {
+}: ContentProps) => {
   const {
     open,
     setOpen,
@@ -161,4 +161,4 @@ export function Content({
       )}
     </AnimatePresence>
   );
-}
+};

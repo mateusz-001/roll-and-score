@@ -2,7 +2,13 @@ import * as React from 'react';
 
 import { cn } from '@/utils';
 
-export function Label({ children, className }: { children: React.ReactNode; className?: string }) {
+export const Label = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <div
       className={cn(
@@ -14,4 +20,4 @@ export function Label({ children, className }: { children: React.ReactNode; clas
       {children}
     </div>
   );
-}
+};

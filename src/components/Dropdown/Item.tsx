@@ -11,7 +11,7 @@ type ItemProps = {
   className?: string;
 };
 
-export function Item({ children, onSelect, disabled, className }: ItemProps) {
+export const Item = ({ children, onSelect, disabled, className }: ItemProps) => {
   const { registerItem, onItemSelect } = useDropdown();
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -50,4 +50,4 @@ export function Item({ children, onSelect, disabled, className }: ItemProps) {
       {children}
     </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import { DropdownCtx } from './context';
 import { useOutsideClick } from './helpers';
 import type { DropdownContextValue, PendingFocus } from './types';
 
-export function Dropdown({ children }: { children: React.ReactNode }) {
+export const Dropdown = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement | null>(null);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
@@ -55,4 +55,4 @@ export function Dropdown({ children }: { children: React.ReactNode }) {
   };
 
   return <DropdownCtx.Provider value={value}>{children}</DropdownCtx.Provider>;
-}
+};
