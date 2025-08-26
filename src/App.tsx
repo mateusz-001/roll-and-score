@@ -8,6 +8,7 @@ import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
 import { RadioField } from './components/Radio/RadioField';
+import { Card } from './components/Card/Card';
 
 function App() {
   const { control } = useForm<{ email: string; fruit: string }>();
@@ -120,6 +121,12 @@ function App() {
           { value: 'plum', label: 'Plum', caption: 'Underrated gem' },
         ]}
       />
+      <Card borderColor="primary">
+        <Heading level="h6">Vite + React + TypeScript + Tailwind CSS</Heading>
+        <Paragraph size="large" color="primary" weight="bold">
+          This is a large paragraph with primary color and bold weight.
+        </Paragraph>
+      </Card>
     </div>
   );
 }
