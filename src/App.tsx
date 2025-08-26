@@ -1,3 +1,4 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import './App.css';
@@ -6,9 +7,10 @@ import { Content, Dropdown, Item, Label, Separator, Trigger } from './components
 import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
+import { RadioField } from './components/Radio/RadioField';
 
 function App() {
-  const { control } = useForm<{ email: string }>();
+  const { control } = useForm<{ email: string; fruit: string }>();
 
   return (
     <div className="flex flex-col items-center gap-4 mb-48">
@@ -107,6 +109,17 @@ function App() {
           <Item onSelect={() => console.log('Logout')}>Logout</Item>
         </Content>
       </Dropdown>
+      <RadioField
+        control={control}
+        name="fruit"
+        legend="Choose your fruit"
+        hint="Pick one fruit only."
+        options={[
+          { value: 'apple', label: 'Apple', caption: 'Crispy classic' },
+          { value: 'banana', label: 'Banana', caption: 'Soft & sweet' },
+          { value: 'plum', label: 'Plum', caption: 'Underrated gem' },
+        ]}
+      />
     </div>
   );
 }
