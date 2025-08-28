@@ -3,15 +3,21 @@ import { useForm } from 'react-hook-form';
 
 import './App.css';
 import { Button } from './components/Button';
+import { Card } from './components/Card/Card';
 import { Content, Dropdown, Item, Label, Separator, Trigger } from './components/Dropdown';
 import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
 import { RadioField } from './components/Radio/RadioField';
-import { Card } from './components/Card/Card';
+import { ToggleField } from './components/Toggle/ToggleField';
 
 function App() {
-  const { control } = useForm<{ email: string; fruit: string }>();
+  const { control } = useForm<{
+    email: string;
+    fruit: string;
+    newsletter: boolean;
+    terms: boolean;
+  }>({ defaultValues: { email: '', fruit: '', newsletter: false, terms: false } });
 
   return (
     <div className="flex flex-col items-center gap-4 mb-48">
@@ -127,6 +133,19 @@ function App() {
           This is a large paragraph with primary color and bold weight.
         </Paragraph>
       </Card>
+      <ToggleField
+        control={control}
+        name="newsletter"
+        label="Subscribe to newsletter"
+        hint="Get the latest updates and offers."
+      />
+      <ToggleField
+        control={control}
+        name="terms"
+        label="Accept terms and conditions"
+        hint="You must accept the terms to proceed."
+        required
+      />
     </div>
   );
 }
