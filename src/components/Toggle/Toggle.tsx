@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { cn } from '@/utils';
+
 export type ToggleProps = {
   id?: string;
   name?: string;
@@ -38,12 +40,12 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
     return (
       <label
         htmlFor={finalId}
-        className={[
+        className={cn(
           'flex items-start justify-between gap-3 rounded-xl p-3 md:p-4',
           'transition-colors',
           disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer',
           className,
-        ].join(' ')}
+        )}
       >
         <input
           ref={ref}
@@ -60,13 +62,13 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
 
         <span
           aria-hidden
-          className={[
+          className={cn(
             'relative mt-0.5 inline-flex h-6 w-10 select-none items-center rounded-full',
             'bg-gray transition-colors',
             'peer-checked:bg-primary',
             'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary',
             'peer-checked:[&>span]:translate-x-4',
-          ].join(' ')}
+          )}
         >
           <span className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full bg-white shadow-md transform transition-transform" />
         </span>

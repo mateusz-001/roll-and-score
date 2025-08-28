@@ -9,6 +9,7 @@ import { Heading } from './components/Heading';
 import { Input } from './components/Input';
 import { Paragraph } from './components/Paragraph';
 import { RadioField } from './components/Radio/RadioField';
+import { UsersTableDemo } from './components/Table/UsersTableDemo';
 import { ToggleField } from './components/Toggle/ToggleField';
 
 function App() {
@@ -146,6 +147,7 @@ function App() {
         hint="You must accept the terms to proceed."
         required
       />
+      <UsersTableDemo />
     </div>
   );
 }

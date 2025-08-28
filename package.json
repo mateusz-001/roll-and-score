@@ -18,6 +18,7 @@
     "*.{json,css,md}": "prettier --check"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "framer-motion": "^12.23.11",
     "lucide-react": "^0.539.0",
