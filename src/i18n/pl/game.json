@@ -1,0 +1,4 @@
+{
+  "start": { "instructions": "Dodaj graczy i rozpocznij." },
+  "table": { "round": "Runda {{n}}" }
+}

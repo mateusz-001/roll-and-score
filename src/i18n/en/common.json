@@ -1,0 +1,5 @@
+{
+  "nav": { "start": "Start", "game": "Game", "results": "Results", "hof": "Hall of Fame" },
+  "start": { "title": "Start a game" },
+  "actions": { "startGame": "Start", "finishGame": "Finish game" }
+}

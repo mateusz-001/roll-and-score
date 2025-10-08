@@ -1,7 +1,10 @@
 import React from 'react';
+// eslint-disable-next-line import/order
 import { useForm } from 'react-hook-form';
 
 import './App.css';
+import { useTranslation } from 'react-i18next';
+
 import { Button } from './components/Button';
 import { Card } from './components/Card/Card';
 import { Content, Dropdown, Item, Label, Separator, Trigger } from './components/Dropdown';
@@ -19,11 +22,12 @@ function App() {
     newsletter: boolean;
     terms: boolean;
   }>({ defaultValues: { email: '', fruit: '', newsletter: false, terms: false } });
+  const { t } = useTranslation(['common', 'game']);
 
   return (
     <div className="flex flex-col items-center gap-4 mb-48">
-      <Heading level="h1">Vite + React + TypeScript + Tailwind CSS</Heading>
-      <Heading level="h2">Vite + React + TypeScript + Tailwind CSS</Heading>
+      <Heading level="h1">{t('common:start.title')}</Heading>
+      <Heading level="h2">{t('common:start.title')}</Heading>
       <Heading level="h3">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h4">Vite + React + TypeScript + Tailwind CSS</Heading>
       <Heading level="h5">Vite + React + TypeScript + Tailwind CSS</Heading>
