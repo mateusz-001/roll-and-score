@@ -33,7 +33,9 @@ export const Navlink: React.FC<Props> = ({ to, icon, label, className }) => {
       <div
         className={cn(
           'max-lg:bg-secondary/30 max-lg:p-2 max-lg:rounded-sm duration-200',
-          isLinkActive ? 'max-lg:bg-secondary/80 max-lg:scale-105' : 'max-lg:bg-secondary/30',
+          isLinkActive
+            ? 'max-lg:bg-secondary/80 max-lg:scale-105'
+            : 'text-primary max-lg:bg-secondary/30',
         )}
       >
         {icon}
