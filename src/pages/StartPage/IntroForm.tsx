@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Dices, Plus, Trash } from 'lucide-react';
 import React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
@@ -6,6 +7,7 @@ import { Button } from '@/components/Button';
 import { Heading } from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { Paragraph } from '@/components/Paragraph';
+import { registerPlayersSchema } from '@/schemas';
 
 const MIN_PLAYERS = 2;
 const MAX_PLAYERS = 10;
@@ -19,11 +21,16 @@ interface Props {
 
 export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
   const methods = useForm<FormValues>({
-    mode: 'onSubmit',
+    resolver: zodResolver(registerPlayersSchema),
+    mode: 'onChange',
     defaultValues: { players: Array.from({ length: MIN_PLAYERS }, () => ({ name: '' })) },
   });
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = methods;
 
-  const { control, handleSubmit } = methods;
   const {
     fields,
     append: addPlayer,
@@ -106,7 +113,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
               <ArrowLeft className="mr-2 h-5 w-5" />
               Powrót
             </Button>
-            <Button size="md" variant="primary" type="submit">
+            <Button size="md" variant="primary" type="submit" disabled={!isValid}>
               Rozpocznij grę
               <Dices className="ml-2 h-5 w-5" />
             </Button>
