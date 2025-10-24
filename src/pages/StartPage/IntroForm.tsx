@@ -2,12 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Dices, Plus, Trash } from 'lucide-react';
 import React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { redirect } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { Heading } from '@/components/Heading';
 import { Input } from '@/components/Input';
 import { Paragraph } from '@/components/Paragraph';
 import { registerPlayersSchema } from '@/schemas';
+import { useGameStore } from '@/store/gameStore';
 
 const MIN_PLAYERS = 2;
 const MAX_PLAYERS = 10;
@@ -20,6 +22,8 @@ interface Props {
 }
 
 export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
+  const initializeGame = useGameStore(state => state.initializeGame);
+
   const methods = useForm<FormValues>({
     resolver: zodResolver(registerPlayersSchema),
     mode: 'onChange',
@@ -28,6 +32,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isValid },
   } = methods;
 
@@ -46,7 +51,9 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
       name: player.name.trim(),
     }));
 
-    console.log(payload);
+    initializeGame(payload);
+    reset();
+    redirect('game');
   };
 
   const handleAdd = () => {
