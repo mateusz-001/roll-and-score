@@ -23,7 +23,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
     defaultValues: { players: Array.from({ length: MIN_PLAYERS }, () => ({ name: '' })) },
   });
 
-  const { control, handleSubmit, setFocus } = methods;
+  const { control, handleSubmit } = methods;
   const {
     fields,
     append: addPlayer,
@@ -45,8 +45,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
   const handleAdd = () => {
     if (!canAdd) return;
 
-    addPlayer({ name: '' });
-    queueMicrotask(() => setFocus(`players.${fields.length}.name` as const));
+    addPlayer({ name: '' }, { shouldFocus: true });
   };
 
   const handleRemove = (index: number) => {
