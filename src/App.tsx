@@ -9,9 +9,14 @@ import { paths } from './routes/paths';
 
 export default function App() {
   return (
-    <main className="grid grid-cols-1 min-h-screen bg-bg text-text relative md:grid-cols-[110px_1fr] lg:grid-cols-[220px_1fr]">
+    <main
+      className="
+        bg-gradient-layout
+        grid grid-cols-1 min-h-screen bg-bg text-text relative md:grid-cols-[110px_1fr] lg:grid-cols-[220px_1fr]
+      "
+    >
       <Navigation />
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div>
         <Routes>
           <Route path={paths.start} element={<StartPage />} />
           <Route path={paths.game} element={<GamePage />} />

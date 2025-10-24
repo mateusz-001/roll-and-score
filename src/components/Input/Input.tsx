@@ -8,13 +8,25 @@ type InputProps = {
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
+  rules: Record<string, unknown>;
   label?: string;
   className?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'name' | 'className'>;
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { name, control, label, placeholder, type = 'text', disabled, required, className, ...rest },
+    {
+      name,
+      control,
+      label,
+      placeholder,
+      type = 'text',
+      disabled,
+      required,
+      className,
+      rules,
+      ...rest
+    },
     ref,
   ) => {
     const [isFocused, setIsFocused] = React.useState(false);
@@ -23,13 +35,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <Controller
         name={name}
         control={control}
+        rules={rules}
         render={({ field, fieldState }) => {
           const hasValue = field.value && field.value.length > 0;
           const showRequired = required && !hasValue;
           const floatLabel = isFocused || hasValue;
 
           return (
-            <div className={cn('relative w-full', className)}>
+            <div className={cn('relative w-full', fieldState.error ? 'mb-5' : '', className)}>
               <input
                 {...field}
                 {...rest}
@@ -48,13 +61,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   'focus:outline-none focus-visible:border-primary',
                   'transition-colors duration-200',
                   disabled ? 'opacity-50 cursor-not-allowed' : '',
-                  fieldState.error ? 'border-red-500' : '',
+                  fieldState.error ? '!border-red-500' : '',
                 )}
               />
               <label
                 htmlFor={name}
                 className={cn(
-                  'absolute left-4 transition-all duration-200',
+                  'absolute left-[18px] transition-all duration-200',
                   floatLabel
                     ? 'text-body-xs top-2'
                     : 'text-body-md top-1/2 transform -translate-y-1/2 opacity-50',
@@ -64,7 +77,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 {showRequired && <span className="text-red-500 font-bold">*</span>}
               </label>
               {fieldState.error && (
-                <p className="mt-1 text-left ml-2 text-xs text-red-500">
+                <p className="absolute left-0 -bottom-5 mt-1 text-left ml-2 text-xs text-red-500">
                   {fieldState.error.message}
                 </p>
               )}

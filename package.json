@@ -18,6 +18,7 @@
     "*.{json,css,md}": "prettier --check"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "framer-motion": "^12.23.11",
@@ -28,7 +29,8 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.61.1",
     "react-i18next": "^16.0.0",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

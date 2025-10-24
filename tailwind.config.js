@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        'gradient-layout': 'linear-gradient(180deg, #F9F6F1 40%, #9B5DE5 100%)',
+      },
       colors: {
         bg: '#F9F6F1',
         text: '#1F1F1F',
@@ -41,6 +44,20 @@ export default {
       },
       spacing: {
         18: '4.5rem', // 72px
+      },
+      keyframes: {
+        scalePulse: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
+        floatDice: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-8px) rotate(6deg)' },
+        },
+      },
+      animation: {
+        'scale-pulse': 'scalePulse 3s ease-in-out infinite',
+        'float-dice': 'floatDice 4s ease-in-out infinite',
       },
     },
   },
