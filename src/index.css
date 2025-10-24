@@ -9,7 +9,7 @@
 }
 
 body {
-  @apply font-body text-text bg-bg text-base leading-relaxed antialiased;
+  @apply font-body text-text bg-white text-base leading-relaxed antialiased;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

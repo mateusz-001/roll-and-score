@@ -1,0 +1,23 @@
+import * as React from 'react';
+
+import { cn } from '@/utils';
+
+export const Label = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div
+      className={cn(
+        'px-3 py-2 text-xs font-semibold uppercase tracking-wider font-heading text-text',
+        className,
+      )}
+      aria-hidden="true"
+    >
+      {children}
+    </div>
+  );
+};
