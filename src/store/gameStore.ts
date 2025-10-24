@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 import { Game } from '@/types/game';
-import { BottomCombination, BottomKey, Player, TopCombination, TopKey } from '@/types/player';
+import { BottomCombination, BottomKey, TopCombination, TopKey } from '@/types/player';
 import { Throw } from '@/types/throw';
 import { createEmptyBottom, createEmptyTop, nowISO, recalcOverall, STORAGE } from '@/utils';
 
@@ -13,7 +13,7 @@ type GameState = {
 };
 
 type GameActions = {
-  initializeGame: (players: Player[]) => void;
+  initializeGame: (players: { id: number; name: string }[]) => void;
   loadFromStorage: () => void;
   resetGame: () => void;
   nextRound: () => void;
