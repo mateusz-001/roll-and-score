@@ -1,11 +1,11 @@
 export type TopCombination = {
-  isPassed: boolean;
+  isPassed: boolean | null;
   bonus: number;
   score: number;
 };
 
 export type BottomCombination = {
-  isPassed: boolean;
+  isPassed: boolean | null;
   idFirstThrow: boolean;
   score: number;
 };
