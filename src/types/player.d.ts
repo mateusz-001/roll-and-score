@@ -1,6 +1,5 @@
 export type TopCombination = {
   isPassed: boolean | null;
-  bonus: number;
   score: number;
 };
 
@@ -27,12 +26,15 @@ export interface Player {
   name: string;
   game: {
     top: {
-      one: TopCombination;
-      two: TopCombination;
-      three: TopCombination;
-      four: TopCombination;
-      five: TopCombination;
-      six: TopCombination;
+      combinations: {
+        one: TopCombination;
+        two: TopCombination;
+        three: TopCombination;
+        four: TopCombination;
+        five: TopCombination;
+        six: TopCombination;
+      };
+      bonus: number;
       score: number;
     };
     bottom: {

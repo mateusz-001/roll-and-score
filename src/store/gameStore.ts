@@ -128,7 +128,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
         if (!player) return;
 
-        const cell = player.game.top[key];
+        const cell = player.game.top.combinations[key];
         Object.assign(cell, data);
         recalcOverall(player);
       });
