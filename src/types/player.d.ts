@@ -38,15 +38,17 @@ export interface Player {
       score: number;
     };
     bottom: {
-      pair: BottomCombination;
-      doublePair: BottomCombination;
-      triple: BottomCombination;
-      quadruple: BottomCombination;
-      full: BottomCombination;
-      smallStraight: BottomCombination;
-      largeStraight: BottomCombination;
-      poker: BottomCombination;
-      chance: BottomCombination;
+      combinations: {
+        pair: BottomCombination;
+        doublePair: BottomCombination;
+        triple: BottomCombination;
+        quadruple: BottomCombination;
+        full: BottomCombination;
+        smallStraight: BottomCombination;
+        largeStraight: BottomCombination;
+        poker: BottomCombination;
+        chance: BottomCombination;
+      };
       score: number;
     };
     overallScore: number;

@@ -6,3 +6,5 @@ export * from './recalcOverall';
 export * from './recalcTop';
 export * from './createEmptyBottom';
 export * from './createEmptyTop';
+export * from './evaluateBottom';
+export * from './evaluateTop';

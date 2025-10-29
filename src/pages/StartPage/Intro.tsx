@@ -31,7 +31,7 @@ export const Intro: React.FC<Props> = ({ handleSetShowForm }) => {
           </div>
         </div>
 
-        <div className="absolute right-0 -bottom-2/3 max-w-md order-1 animate-scale-pulse bg-radial-primary sm:-bottom-3/4 md:order-2 md:-bottom-1/2 xl:right-18">
+        <div className="absolute right-0 -bottom-28 max-w-md order-1 animate-scale-pulse bg-radial-primary sm:-bottom-3/4 md:order-2 md:-bottom-1/2 xl:right-18">
           <img
             src="/assets/start-page-dices.png"
             alt="Three dice showing different numbers"

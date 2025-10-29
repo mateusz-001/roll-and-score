@@ -7,7 +7,8 @@ import { PageWrapper } from '@/components/PageWrapper';
 import { Paragraph } from '@/components/Paragraph';
 import { Toggle } from '@/components/Toggle';
 import { useGameStore } from '@/store/gameStore';
-import { evaluateTop } from '@/utils/evaluateBottom';
+import { evaluateBottom } from '@/utils';
+import { evaluateTop } from '@/utils/evaluateTop';
 
 export const GamePage: React.FC = () => {
   const { game } = useGameStore();
@@ -32,12 +33,22 @@ export const GamePage: React.FC = () => {
     }
   }, []);
 
+  const dices = [2, 2, 2, 2, 2];
+
   console.log(
-    'Rendering GamePage:',
+    'evaluateTop:',
     evaluateTop({
       availableCombinations: game?.players[0].game.top.combinations!,
-      dices: [2, 2, 2, 2, 2],
+      dices,
       currentBonusPoints: 0,
+    }),
+  );
+  console.log(
+    'evaluateBottom:',
+    evaluateBottom({
+      availableCombinations: game?.players[0].game.bottom.combinations!,
+      dices,
+      isFirstThrow,
     }),
   );
 
