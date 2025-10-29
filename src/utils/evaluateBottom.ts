@@ -1,7 +1,9 @@
 import type { Player } from '@/types/player';
 
 const SMALL_STRAIGHT_POINTS = 15;
+const SMALL_STRAIGHT_SET = [1, 2, 3, 4, 5] as const;
 const LARGE_STRAIGHT_POINTS = 20;
+const LARGE_STRAIGHT_SET = [2, 3, 4, 5, 6] as const;
 const POKER_BASE_POINTS = 50;
 
 export type BottomKey =
@@ -21,22 +23,71 @@ export type AvailableBottom = {
   usedDiceIndices: number[];
 };
 
-const sum = (arr: number[]) => arr.reduce((a, b) => a + b, 0);
+const sumDices = (dicesValues: number[]) => dicesValues.reduce((sum, value) => sum + value, 0);
 
-const toCounts = (dice: number[]) => {
-  const counts = new Array(7).fill(0);
-  for (const d of dice) counts[d]++;
+const countDiceValues = (diceValues: number[]) => {
+  const valueCounts = new Array(7).fill(0);
+  for (const value of diceValues) valueCounts[value]++;
 
-  return counts as number[];
+  return valueCounts as number[];
 };
 
-const findIndices = (dices: number[], value: number, limit: number): number[] => {
-  const indices: number[] = [];
-  dices.forEach((d, i) => {
-    if (d === value && indices.length < limit) indices.push(i);
+const mapValueToIndices = (diceValues: number[]) => {
+  const valueToIndices = new Map<number, number[]>();
+
+  diceValues.forEach((value, index) => {
+    if (!valueToIndices.has(value)) {
+      valueToIndices.set(value, []);
+    }
+    valueToIndices.get(value)!.push(index);
   });
 
-  return indices;
+  return valueToIndices;
+};
+
+const getIndicesForValue = (
+  valueToIndices: Map<number, number[]>,
+  value: number,
+  limit: number,
+): number[] => {
+  const indices = valueToIndices.get(value) ?? [];
+
+  return indices.slice(0, limit);
+};
+
+const getIndicesForSet = (diceValues: number[], validValues: readonly number[]) =>
+  diceValues
+    .map((value, index) => (validValues.includes(value) ? index : -1))
+    .filter(index => index !== -1);
+
+const findOfKind = (valueCounts: number[], requiredCount: number): number | null => {
+  for (let face = 6; face >= 1; face--) {
+    if (valueCounts[face] >= requiredCount) return face;
+  }
+
+  return null;
+};
+
+const findTopTwoPairs = (valueCounts: number[]): [number, number] | null => {
+  const pairValues: number[] = [];
+  for (let face = 6; face >= 1; face--) {
+    if (valueCounts[face] >= 2) pairValues.push(face);
+  }
+
+  return pairValues.length >= 2 ? [pairValues[0], pairValues[1]] : null;
+};
+
+const isExactStraight = (valueCounts: number[], straightSet: readonly number[]) =>
+  straightSet.every(face => valueCounts[face] === 1);
+
+const addResult = (
+  results: AvailableBottom[],
+  entry: Omit<AvailableBottom, 'effectiveValue'> & { effectiveValue?: number },
+) => {
+  results.push({
+    ...entry,
+    effectiveValue: entry.effectiveValue ?? entry.score,
+  });
 };
 
 export const evaluateBottom = ({
@@ -48,100 +99,99 @@ export const evaluateBottom = ({
   dices: number[];
   isFirstThrow: boolean;
 }): AvailableBottom[] => {
-  const counts = toCounts(dices);
-  const total = sum(dices);
+  const valueCounts = countDiceValues(dices);
+  const totalSum = sumDices(dices);
+  const valueToIndices = mapValueToIndices(dices);
 
   const results: AvailableBottom[] = [];
 
-  const pairValue = [...Array(7).keys()].reverse().find(v => counts[v] >= 2);
+  const pairValue = findOfKind(valueCounts, 2);
   if (pairValue) {
-    results.push({
+    addResult(results, {
       combination: 'pair',
       score: pairValue * 2,
-      effectiveValue: pairValue * 2,
-      usedDiceIndices: findIndices(dices, pairValue, 2),
+      usedDiceIndices: getIndicesForValue(valueToIndices, pairValue, 2),
     });
   }
 
-  const pairs = [...Array(7).keys()].filter(v => counts[v] >= 2).reverse();
-  if (pairs.length >= 2) {
-    const [high, low] = pairs.slice(0, 2);
-    results.push({
+  const twoPairValues = findTopTwoPairs(valueCounts);
+  if (twoPairValues) {
+    const [higherPair, lowerPair] = twoPairValues;
+    addResult(results, {
       combination: 'doublePair',
-      score: high * 2 + low * 2,
-      effectiveValue: high * 2 + low * 2,
-      usedDiceIndices: [...findIndices(dices, high, 2), ...findIndices(dices, low, 2)],
+      score: higherPair * 2 + lowerPair * 2,
+      usedDiceIndices: [
+        ...getIndicesForValue(valueToIndices, higherPair, 2),
+        ...getIndicesForValue(valueToIndices, lowerPair, 2),
+      ],
     });
   }
 
-  const tripleValue = [...Array(7).keys()].reverse().find(v => counts[v] >= 3);
+  const tripleValue = findOfKind(valueCounts, 3);
   if (tripleValue) {
-    results.push({
+    addResult(results, {
       combination: 'triple',
       score: tripleValue * 3,
-      effectiveValue: tripleValue * 3,
-      usedDiceIndices: findIndices(dices, tripleValue, 3),
+      usedDiceIndices: getIndicesForValue(valueToIndices, tripleValue, 3),
     });
   }
 
-  const hasThree = [...Array(7).keys()].find(v => counts[v] === 3);
-  const hasTwo = [...Array(7).keys()].find(v => counts[v] === 2);
-  if (hasThree && hasTwo) {
-    results.push({
+  const threeOfKind = [1, 2, 3, 4, 5, 6].find(face => valueCounts[face] === 3);
+  const twoOfKind = [1, 2, 3, 4, 5, 6].find(face => valueCounts[face] === 2);
+  if (threeOfKind && twoOfKind) {
+    addResult(results, {
       combination: 'full',
-      score: total,
-      effectiveValue: total,
-      usedDiceIndices: [...findIndices(dices, hasThree, 3), ...findIndices(dices, hasTwo, 2)],
+      score: totalSum,
+      usedDiceIndices: [
+        ...getIndicesForValue(valueToIndices, threeOfKind, 3),
+        ...getIndicesForValue(valueToIndices, twoOfKind, 2),
+      ],
     });
   }
 
-  const smallSet = [1, 2, 3, 4, 5];
-  if (smallSet.every(v => counts[v] === 1)) {
-    results.push({
+  if (isExactStraight(valueCounts, SMALL_STRAIGHT_SET)) {
+    addResult(results, {
       combination: 'smallStraight',
       score: SMALL_STRAIGHT_POINTS,
-      effectiveValue: SMALL_STRAIGHT_POINTS,
-      usedDiceIndices: dices.map((d, i) => (smallSet.includes(d) ? i : -1)).filter(i => i !== -1),
+      usedDiceIndices: getIndicesForSet(dices, SMALL_STRAIGHT_SET),
     });
   }
 
-  const largeSet = [2, 3, 4, 5, 6];
-  if (largeSet.every(v => counts[v] === 1)) {
-    results.push({
+  if (isExactStraight(valueCounts, LARGE_STRAIGHT_SET)) {
+    addResult(results, {
       combination: 'largeStraight',
       score: LARGE_STRAIGHT_POINTS,
-      effectiveValue: LARGE_STRAIGHT_POINTS,
-      usedDiceIndices: dices.map((d, i) => (largeSet.includes(d) ? i : -1)).filter(i => i !== -1),
+      usedDiceIndices: getIndicesForSet(dices, LARGE_STRAIGHT_SET),
     });
   }
 
-  const pokerValue = [...Array(7).keys()].find(v => counts[v] === 5);
+  const pokerValue = findOfKind(valueCounts, 5);
   if (pokerValue) {
-    const total = POKER_BASE_POINTS + pokerValue * 5;
-    results.push({
+    const pokerScore = POKER_BASE_POINTS + pokerValue * 5;
+    addResult(results, {
       combination: 'poker',
-      score: total,
-      effectiveValue: total,
+      score: pokerScore,
       usedDiceIndices: [0, 1, 2, 3, 4],
     });
   }
 
-  results.push({
+  addResult(results, {
     combination: 'chance',
-    score: total,
-    effectiveValue: total,
+    score: totalSum,
     usedDiceIndices: [0, 1, 2, 3, 4],
   });
 
   if (isFirstThrow) {
-    for (const r of results) {
-      r.effectiveValue = r.score * 2;
+    for (const result of results) {
+      result.effectiveValue = result.score * 2;
     }
   }
 
-  const freeResults = results.filter(r => !availableCombinations[r.combination]?.isPassed);
+  const freeCombinations = results.filter(
+    result => !availableCombinations[result.combination]?.isPassed,
+  );
 
-  freeResults.sort((a, b) => b.effectiveValue - a.effectiveValue);
+  freeCombinations.sort((a, b) => b.effectiveValue - a.effectiveValue || b.score - a.score);
 
-  return freeResults;
+  return freeCombinations;
 };
