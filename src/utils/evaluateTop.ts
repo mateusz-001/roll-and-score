@@ -35,7 +35,7 @@ export const evaluateTop = ({
   dices: number[];
   currentBonusPoints: number | null;
 }): AvailableTop[] => {
-  if (dices.length !== 5) throw new Error(`evaluateTop expects 5 dice, got ${dices.length}`);
+  if (dices.length !== 5) return [];
 
   const counts = toCounts(dices);
   const results: AvailableTop[] = [];
@@ -80,7 +80,7 @@ export const evaluateTop = ({
   const onlyFree = results.filter(result => {
     const cell = availableCombinations[result.combination];
 
-    return !cell?.isPassed;
+    return cell?.isPassed === null;
   });
 
   if (onlyFree.length === 0) return [];

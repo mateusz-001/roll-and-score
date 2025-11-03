@@ -99,6 +99,8 @@ export const evaluateBottom = ({
   dices: number[];
   isFirstThrow: boolean;
 }): AvailableBottom[] => {
+  if (dices.length !== 5) return [];
+
   const valueCounts = countDiceValues(dices);
   const totalSum = sumDices(dices);
   const valueToIndices = mapValueToIndices(dices);
@@ -184,11 +186,12 @@ export const evaluateBottom = ({
   if (isFirstThrow) {
     for (const result of results) {
       result.effectiveValue = result.score * 2;
+      result.score = result.score * 2;
     }
   }
 
   const freeCombinations = results.filter(
-    result => !availableCombinations[result.combination]?.isPassed,
+    result => availableCombinations[result.combination]?.isPassed === null,
   );
 
   freeCombinations.sort((a, b) => b.effectiveValue - a.effectiveValue || b.score - a.score);

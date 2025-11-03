@@ -8,3 +8,4 @@ export * from './createEmptyBottom';
 export * from './createEmptyTop';
 export * from './evaluateBottom';
 export * from './evaluateTop';
+export * from './findCanBeSetToNull';

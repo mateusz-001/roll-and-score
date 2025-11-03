@@ -142,7 +142,7 @@ export const useGameStore = create<GameState & GameActions>()(
         const player = game.players.find(p => p.id === playerId);
         if (!player) return;
 
-        const cell = player.game.bottom[key];
+        const cell = player.game.bottom.combinations[key];
         Object.assign(cell, data);
         recalcOverall(player);
       });

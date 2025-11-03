@@ -1,14 +1,19 @@
-import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/components/Button';
-import { Heading } from '@/components/Heading';
 import { PageWrapper } from '@/components/PageWrapper';
-import { Paragraph } from '@/components/Paragraph';
-import { Toggle } from '@/components/Toggle';
 import { useGameStore } from '@/store/gameStore';
-import { evaluateBottom } from '@/utils';
-import { evaluateTop } from '@/utils/evaluateTop';
+import { AvailableBottom, evaluateBottom, findCanBeSetToNull } from '@/utils';
+import { AvailableTop, evaluateTop } from '@/utils/evaluateTop';
+
+import { DicesPick } from './DicesPick';
+import { Header } from './Header';
+import { Results } from './Results';
+
+export type AvailableCombinations = {
+  top: AvailableTop[] | [];
+  bottom: AvailableBottom[] | [];
+};
 
 export const GamePage: React.FC = () => {
   const { game } = useGameStore();
@@ -17,6 +22,10 @@ export const GamePage: React.FC = () => {
 
   const [showPoints, setShowPoints] = React.useState(false);
   const [isFirstThrow, setIsFirstThrow] = React.useState(false);
+  const [selectedCombination, setSelectedCombination] = React.useState<string | null>(null);
+
+  const [selectedDices, setSelectedDices] = React.useState<(number | null)[]>([]);
+  const filteredDices = selectedDices.filter((dice): dice is number => dice !== null);
 
   const [currentPlayerId, setCurrentPlayerId] = React.useState<number | null>(null);
   const hasPlayerId = currentPlayerId !== null;
@@ -27,152 +36,120 @@ export const GamePage: React.FC = () => {
     ? game?.players.find(pl => pl.id === currentPlayerId! + 1)?.name || game?.players[0].name || '-'
     : null;
 
+  const [availableCombinations, setAvailableCombinations] = React.useState<AvailableCombinations>({
+    top: [],
+    bottom: [],
+  });
+  const hasTopAvailable = availableCombinations.top.length > 0;
+  const hasBottomAvailable = availableCombinations.bottom.length > 0;
+
+  const combinationsCanBeSetToNull = findCanBeSetToNull({
+    playerId: currentPlayerId!,
+    game: game!,
+  });
+
   React.useEffect(() => {
     if (hasPlayers) {
       setCurrentPlayerId(firstPlayerId);
     }
   }, []);
 
-  const dices = [2, 2, 2, 2, 2];
+  const handleToggleShowPoints = () => {
+    setShowPoints(prev => !prev);
+  };
 
-  console.log(
-    'evaluateTop:',
-    evaluateTop({
-      availableCombinations: game?.players[0].game.top.combinations!,
-      dices,
-      currentBonusPoints: 0,
-    }),
-  );
-  console.log(
-    'evaluateBottom:',
-    evaluateBottom({
-      availableCombinations: game?.players[0].game.bottom.combinations!,
-      dices,
-      isFirstThrow,
-    }),
-  );
+  const handleToggleFirstThrow = () => {
+    setIsFirstThrow(prev => !prev);
+  };
+
+  const handleSwitchToNextPlayer = () => {
+    if (!hasPlayerId || !hasPlayers) return;
+
+    const currentIndex = game!.players.findIndex(player => player.id === currentPlayerId);
+    const nextIndex = (currentIndex + 1) % game!.players.length;
+    const nextPlayerId = game!.players[nextIndex].id;
+
+    setCurrentPlayerId(nextPlayerId);
+  };
+
+  const handleSetDices = (diceIndex: number | null, value: number | null) => {
+    setSelectedDices(prev => {
+      const newDices = [...prev];
+      if (diceIndex !== null) {
+        newDices[diceIndex] = value;
+      }
+
+      return newDices;
+    });
+  };
+
+  React.useEffect(() => {
+    if (filteredDices.length === 5) {
+      const topCombinations = evaluateTop({
+        availableCombinations: game?.players[0].game.top.combinations!,
+        dices: filteredDices,
+        currentBonusPoints: game?.players[0].game.top.bonus || 0,
+      });
+      const bottomCombinations = evaluateBottom({
+        availableCombinations: game?.players[0].game.bottom.combinations!,
+        dices: filteredDices,
+        isFirstThrow: isFirstThrow,
+      });
+
+      setAvailableCombinations({
+        top: topCombinations,
+        bottom: bottomCombinations,
+      });
+    } else {
+      setAvailableCombinations({
+        top: [],
+        bottom: [],
+      });
+    }
+  }, [selectedDices, isFirstThrow]);
+
+  React.useEffect(() => {
+    setSelectedCombination(null);
+  }, [availableCombinations.top, availableCombinations.bottom]);
 
   return (
     <PageWrapper className="relative h-screen">
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 md:top-1/2 md:-translate-y-1/2 w-full h-full max-h-[calc(100dvh-112px)] max-w-[calc(100%-24px)] p-4 bg-white rounded-lg shadow-card border-2 border-secondary overflow-y-auto mx-auto md:p-6 lg:max-w-2xl ">
-        <header>
-          <Heading level="h2" className="mb-3 md:mb-4 lg:mb-6">
-            <span className="text-primary">{currentPlayerName}!</span>
-            <br /> Czas ustrzelić parę punktów
-          </Heading>
-          <div className="flex max-sm:flex-col sm:gap-1 sm:justify-between">
-            <Paragraph size="small">
-              Runda:{' '}
-              <span className="font-semibold">
-                <span className="text-primary">{game?.round}</span> z 15
-              </span>
-            </Paragraph>
-            <Paragraph size="small">
-              Przygotuj się: <span className="text-primary font-semibold">{nextPlayerName}</span>
-            </Paragraph>
-          </div>
-        </header>
+        <Header
+          currentPlayerName={currentPlayerName || '-'}
+          nextPlayerName={nextPlayerName || '-'}
+          currentRound={game?.round || 0}
+        />
         <main className="mt-3 flex flex-col gap-3 md:gap-4 md:mt-4 lg:mt-6 lg:gap-6">
-          <section className="p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
-            <Heading level="h4" className="text-primary mb-2 md:mb-3">
-              Rzut
-            </Heading>
-            <div className="flex flex-col gap-3 md:gap-4">
-              <div>
-                <Paragraph size="small" className="italic">
-                  Pierwsza kość:
-                </Paragraph>
-                <div className="flex gap-2 md:gap-3 lg:gap-4">
-                  <Dice1 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice2 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice3 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice4 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice5 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice6 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                </div>
-              </div>
-              <div>
-                <Paragraph size="small" className="italic">
-                  Druga kość:
-                </Paragraph>
-                <div className="flex gap-2 md:gap-3 lg:gap-4">
-                  <Dice1 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice2 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice3 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice4 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice5 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice6 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                </div>
-              </div>
-              <div>
-                <Paragraph size="small" className="italic">
-                  Trzecia kość:
-                </Paragraph>
-                <div className="flex gap-2 md:gap-3 lg:gap-4">
-                  <Dice1 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice2 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice3 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice4 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice5 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice6 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                </div>
-              </div>
-              <div>
-                <Paragraph size="small" className="italic">
-                  Czwarta kość:
-                </Paragraph>
-                <div className="flex gap-2 md:gap-3 lg:gap-4">
-                  <Dice1 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice2 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice3 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice4 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice5 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice6 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                </div>
-              </div>
-              <div>
-                <Paragraph size="small" className="italic">
-                  Piąta kość:
-                </Paragraph>
-                <div className="flex gap-2 md:gap-3 lg:gap-4">
-                  <Dice1 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice2 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice3 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice4 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice5 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                  <Dice6 className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                </div>
-              </div>
-              <Toggle
-                label="Rzuciłeś z ręki?"
-                checked={isFirstThrow}
-                className="!p-0"
-                onCheckedChange={() => setIsFirstThrow(!isFirstThrow)}
+          <DicesPick
+            selectedDices={selectedDices}
+            handleSetDices={handleSetDices}
+            isFirstThrow={isFirstThrow}
+            handleToggleFirstThrow={handleToggleFirstThrow}
+          />
+          {filteredDices.length === 5 && (
+            <>
+              <Results
+                showPoints={showPoints}
+                handleToggleShowPoints={handleToggleShowPoints}
+                availableCombinations={availableCombinations}
+                hasTopAvailable={hasTopAvailable}
+                hasBottomAvailable={hasBottomAvailable}
+                selectedCombination={selectedCombination}
+                setSelectedCombination={setSelectedCombination}
+                bonusPoints={game?.players[0].game.top.bonus || 0}
+                combinationsCanBeSetToNull={combinationsCanBeSetToNull}
               />
-            </div>
-          </section>
-          <section className="p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
-            <Heading level="h4" className="text-primary mb-2 md:mb-3">
-              Wynik rzutu
-            </Heading>
-            <div>
-              <Paragraph size="small" className="italic">
-                Suma oczek:
-              </Paragraph>
-              <Paragraph size="large" className="font-semibold">
-                0
-              </Paragraph>
-            </div>
-            <Toggle
-              label="Pokaż najlepsze propozycje punktowe"
-              checked={showPoints}
-              className="!p-0 mt-4 md:mt-4"
-              onCheckedChange={() => setShowPoints(!showPoints)}
-            />
-          </section>
-          <Button className="w-full" variant="primary" size="lg">
-            Zatwierdź wynik
-          </Button>
+              <Button
+                className="w-full"
+                variant="primary"
+                size="lg"
+                onClick={handleSwitchToNextPlayer}
+              >
+                Zatwierdź wynik
+              </Button>
+            </>
+          )}
         </main>
       </div>
     </PageWrapper>
