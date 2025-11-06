@@ -14,15 +14,7 @@ export const recalcTop = (player: Player) => {
   top.bonus = bonus;
 
   if (isAllPassed) {
-    top.score =
-      top.combinations.one.score +
-      top.combinations.two.score +
-      top.combinations.three.score +
-      top.combinations.four.score +
-      top.combinations.five.score +
-      top.combinations.six.score +
-      top.bonus +
-      50;
+    top.score = top.bonus + 50;
   } else {
     top.score =
       top.combinations.one.score +

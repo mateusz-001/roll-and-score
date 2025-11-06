@@ -27,6 +27,8 @@ export const GamePage: React.FC = () => {
   const hasPlayers = game && playersCount > 0;
   const hasNextPlayer = activePlayer.index === playersCount - 1 ? false : true;
   const activePlayerData = game!.players[activePlayer.index];
+  console.log('activePlayerData', activePlayerData);
+  console.log('activePlayerData.game', activePlayer);
 
   const isFinalRound = game?.round === game?.maxRounds;
 
@@ -49,7 +51,7 @@ export const GamePage: React.FC = () => {
   const hasAvailableCombinations = hasTopAvailable || hasBottomAvailable;
 
   const combinationsCanBeSetToNull = findCanBeSetToNull({
-    playerId: activePlayer.id,
+    playerId: activePlayerData.id,
     game: game!,
   });
 
@@ -75,13 +77,13 @@ export const GamePage: React.FC = () => {
       );
 
       if (isSelectedTopCombination) {
-        setTopCell(activePlayer.id, selectedCombination as TopKey, {
+        setTopCell(activePlayerData.id, selectedCombination as TopKey, {
           score: 0,
           bonus: 0,
           isPassed: false,
         });
       } else {
-        setBottomCell(activePlayer.id, selectedCombination as BottomKey, {
+        setBottomCell(activePlayerData.id, selectedCombination as BottomKey, {
           score: 0,
           isFirstThrow,
           isPassed: false,
@@ -89,13 +91,13 @@ export const GamePage: React.FC = () => {
       }
     } else {
       if ('bonusPoints' in findCombination!) {
-        setTopCell(activePlayer.id, selectedCombination as TopKey, {
+        setTopCell(activePlayerData.id, selectedCombination as TopKey, {
           score: findCombination.score,
           bonus: findCombination.bonusPoints as number,
           isPassed: true,
         });
       } else {
-        setBottomCell(activePlayer.id, selectedCombination as BottomKey, {
+        setBottomCell(activePlayerData.id, selectedCombination as BottomKey, {
           score: findCombination!.score,
           isFirstThrow,
           isPassed: true,
