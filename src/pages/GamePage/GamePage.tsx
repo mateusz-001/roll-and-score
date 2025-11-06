@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { PageWrapper } from '@/components/PageWrapper';
@@ -9,7 +8,9 @@ import { AvailableBottom, evaluateBottom, findCanBeSetToNull } from '@/utils';
 import { AvailableTop, evaluateTop } from '@/utils/evaluateTop';
 
 import { DicesPick } from './DicesPick';
+import { FinalPlacements } from './FinalPlacements';
 import { Header } from './Header';
+import { MissingCombinations } from './MissingCombinations';
 import { Results } from './Results';
 
 export type AvailableCombinations = {
@@ -18,8 +19,7 @@ export type AvailableCombinations = {
 };
 
 export const GamePage: React.FC = () => {
-  const navigate = useNavigate();
-  const { game, setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame, saveAndReset } =
+  const { game, setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame } =
     useGameStore();
   const { activePlayer, players } = game!;
 
@@ -27,8 +27,6 @@ export const GamePage: React.FC = () => {
   const hasPlayers = game && playersCount > 0;
   const hasNextPlayer = activePlayer.index === playersCount - 1 ? false : true;
   const activePlayerData = game!.players[activePlayer.index];
-  console.log('activePlayerData', activePlayerData);
-  console.log('activePlayerData.game', activePlayer);
 
   const isFinalRound = game?.round === game?.maxRounds;
 
@@ -69,7 +67,6 @@ export const GamePage: React.FC = () => {
     const findCombination = [...availableCombinations.top, ...availableCombinations.bottom].find(
       combo => combo.combination === selectedCombination,
     );
-    console.log('findCombination', findCombination);
 
     if (!hasAvailableCombinations) {
       const isSelectedTopCombination = Object.keys(activePlayerData.game.top.combinations).includes(
@@ -164,7 +161,11 @@ export const GamePage: React.FC = () => {
     setSelectedCombination(null);
   }, [availableCombinations.top, availableCombinations.bottom]);
 
-  console.log(game);
+  React.useEffect(() => {
+    if (isFinalRound && !hasNextPlayer) {
+      setShowFinalResults(true);
+    }
+  }, [isFinalRound, hasNextPlayer]);
 
   return (
     <PageWrapper className="relative h-screen">
@@ -203,7 +204,7 @@ export const GamePage: React.FC = () => {
                     variant="primary"
                     size="lg"
                     onClick={handleSwitchToNextPlayer}
-                    // disabled={!selectedCombination}
+                    disabled={!selectedCombination}
                   >
                     {isFinalRound && !hasNextPlayer
                       ? 'Zakończ grę'
@@ -213,32 +214,16 @@ export const GamePage: React.FC = () => {
                   </Button>
                 </>
               )}
+              {(hasTopAvailable || hasBottomAvailable) && (
+                <MissingCombinations
+                  availableCombinationsTop={combinationsCanBeSetToNull.top}
+                  availableCombinationsBottom={combinationsCanBeSetToNull.bottom}
+                />
+              )}
             </main>
           </>
         )}
-        {showFinalResults && (
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-primary mb-4">Koniec gry!</h2>
-            <p className="mb-6">Wyniki końcowe zostały zapisane.</p>
-            <ul>
-              {game?.placement.map(player => (
-                <li key={player.id}>
-                  {player.name}: {player.score}
-                </li>
-              ))}
-            </ul>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => {
-                saveAndReset();
-                navigate('/results');
-              }}
-            >
-              Rozpocznij nową grę
-            </Button>
-          </div>
-        )}
+        {showFinalResults && <FinalPlacements placement={game?.placement} />}
       </div>
     </PageWrapper>
   );
