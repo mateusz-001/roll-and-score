@@ -1,20 +1,10 @@
-import type { Player } from '@/types/player';
+import type { BottomKey, Player } from '@/types/player';
 
 const SMALL_STRAIGHT_POINTS = 15;
 const SMALL_STRAIGHT_SET = [1, 2, 3, 4, 5] as const;
 const LARGE_STRAIGHT_POINTS = 20;
 const LARGE_STRAIGHT_SET = [2, 3, 4, 5, 6] as const;
 const POKER_BASE_POINTS = 50;
-
-export type BottomKey =
-  | 'pair'
-  | 'doublePair'
-  | 'triple'
-  | 'full'
-  | 'smallStraight'
-  | 'largeStraight'
-  | 'poker'
-  | 'chance';
 
 export type AvailableBottom = {
   combination: BottomKey;
@@ -148,6 +138,15 @@ export const evaluateBottom = ({
         ...getIndicesForValue(valueToIndices, threeOfKind, 3),
         ...getIndicesForValue(valueToIndices, twoOfKind, 2),
       ],
+    });
+  }
+
+  const quadrupleValue = findOfKind(valueCounts, 4);
+  if (quadrupleValue) {
+    addResult(results, {
+      combination: 'quadruple',
+      score: totalSum,
+      usedDiceIndices: getIndicesForValue(valueToIndices, quadrupleValue, 4),
     });
   }
 
