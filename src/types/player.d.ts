@@ -6,7 +6,7 @@ export type TopCombination = {
 
 export type BottomCombination = {
   isPassed: boolean | null;
-  idFirstThrow: boolean;
+  isFirstThrow: boolean;
   score: number;
 };
 
@@ -27,24 +27,29 @@ export interface Player {
   name: string;
   game: {
     top: {
-      one: TopCombination;
-      two: TopCombination;
-      three: TopCombination;
-      four: TopCombination;
-      five: TopCombination;
-      six: TopCombination;
+      combinations: {
+        one: TopCombination;
+        two: TopCombination;
+        three: TopCombination;
+        four: TopCombination;
+        five: TopCombination;
+        six: TopCombination;
+      };
+      bonus: number;
       score: number;
     };
     bottom: {
-      pair: BottomCombination;
-      doublePair: BottomCombination;
-      triple: BottomCombination;
-      quadruple: BottomCombination;
-      full: BottomCombination;
-      smallStraight: BottomCombination;
-      largeStraight: BottomCombination;
-      poker: BottomCombination;
-      chance: BottomCombination;
+      combinations: {
+        pair: BottomCombination;
+        doublePair: BottomCombination;
+        triple: BottomCombination;
+        quadruple: BottomCombination;
+        full: BottomCombination;
+        smallStraight: BottomCombination;
+        largeStraight: BottomCombination;
+        poker: BottomCombination;
+        chance: BottomCombination;
+      };
       score: number;
     };
     overallScore: number;

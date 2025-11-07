@@ -9,6 +9,12 @@ interface Game {
     score: number;
   }[];
   round: number;
+  activePlayer: {
+    id: number;
+    name: string;
+    index: number;
+  };
+  maxRounds: number;
   isFinished: boolean;
   startedAt: string;
   endedAt: string | null;
