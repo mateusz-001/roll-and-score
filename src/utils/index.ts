@@ -9,3 +9,5 @@ export * from './createEmptyTop';
 export * from './evaluateBottom';
 export * from './evaluateTop';
 export * from './findCanBeSetToNull';
+export * from './buildRankedPlacement';
+export * from './getRankLabel';

@@ -54,7 +54,7 @@ export const useGameStore = create<GameState & GameActions>()(
           },
         })),
         placement: [],
-        round: 1,
+        round: 15,
         activePlayer: { ...players[0], index: 0 },
         maxRounds: 15,
         isFinished: false,

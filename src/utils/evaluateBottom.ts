@@ -184,8 +184,15 @@ export const evaluateBottom = ({
 
   if (isFirstThrow) {
     for (const result of results) {
-      result.effectiveValue = result.score * 2;
-      result.score = result.score * 2;
+      if (result.combination === 'poker') {
+        if (pokerValue) {
+          result.effectiveValue = POKER_BASE_POINTS + pokerValue * 10;
+          result.score = POKER_BASE_POINTS + pokerValue * 10;
+        }
+      } else {
+        result.effectiveValue = result.score * 2;
+        result.score = result.score * 2;
+      }
     }
   }
 
