@@ -1,6 +1,6 @@
 import { Game } from '@/types/game';
 
-type RankedPlayer = {
+export type RankedPlayer = {
   id: number;
   name: string;
   score: number;
