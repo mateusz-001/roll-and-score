@@ -11,3 +11,6 @@ export * from './evaluateTop';
 export * from './findCanBeSetToNull';
 export * from './buildRankedPlacement';
 export * from './getRankLabel';
+export * from './readHistoryFromStorage';
+export * from './getGameDuration';
+export * from './formatDate';
