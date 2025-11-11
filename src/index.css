@@ -38,3 +38,38 @@ html {
 .text-balance {
   text-wrap: balance;
 }
+
+/* Animated gradient border for StatCard */
+.statcard-gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.statcard-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem; /* dopasuj do rounded-2xl */
+  padding: 2px; /* grubość bordera */
+  background: linear-gradient(130deg, #9b5de5, #cdb4db, #fdcb6e, #9b5de5);
+  background-size: 300% 300%;
+  animation: gradientFlow 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
