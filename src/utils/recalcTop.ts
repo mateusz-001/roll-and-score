@@ -2,18 +2,27 @@ import { Player } from '@/types/player';
 
 export const recalcTop = (player: Player) => {
   const top = player.game.top;
+  const isAllPassed = Object.values(top.combinations).every(c => c.isPassed === true);
+  const bonus =
+    top.combinations.one.bonus +
+    top.combinations.two.bonus +
+    top.combinations.three.bonus +
+    top.combinations.four.bonus +
+    top.combinations.five.bonus +
+    top.combinations.six.bonus;
 
-  top.score =
-    top.one.score +
-    top.one.bonus +
-    top.two.score +
-    top.two.bonus +
-    top.three.score +
-    top.three.bonus +
-    top.four.score +
-    top.four.bonus +
-    top.five.score +
-    top.five.bonus +
-    top.six.score +
-    top.six.bonus;
+  top.bonus = bonus;
+
+  if (isAllPassed) {
+    top.score = top.bonus + 50;
+  } else {
+    top.score =
+      top.combinations.one.score +
+      top.combinations.two.score +
+      top.combinations.three.score +
+      top.combinations.four.score +
+      top.combinations.five.score +
+      top.combinations.six.score +
+      top.bonus;
+  }
 };

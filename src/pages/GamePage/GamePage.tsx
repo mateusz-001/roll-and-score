@@ -1,10 +1,19 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useGameStore } from '@/store/gameStore';
+
+import { GamePageContent } from './GamePageContent';
 
 export const GamePage: React.FC = () => {
-  return (
-    <div>
-      <h1>Game Page</h1>
-      <p>Roll the dice and score points!</p>
-    </div>
-  );
+  const { game } = useGameStore();
+  const navigate = useNavigate();
+
+  if (!game) {
+    navigate('/');
+
+    return null;
+  }
+
+  return <GamePageContent game={game} />;
 };

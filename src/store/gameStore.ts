@@ -7,6 +7,8 @@ import { BottomCombination, BottomKey, TopCombination, TopKey } from '@/types/pl
 import { Throw } from '@/types/throw';
 import { createEmptyBottom, createEmptyTop, nowISO, recalcOverall, STORAGE } from '@/utils';
 
+type CheckpointReason = 'registration' | 'turn' | 'round' | 'manual' | 'unload' | 'finish';
+
 type GameState = {
   game: Game | null;
   lastThrows: Throw[];
@@ -18,6 +20,9 @@ type GameActions = {
   resetGame: () => void;
   nextRound: () => void;
   finishGame: () => void;
+  saveAndReset: () => void;
+  setActivePlayer: (index: number) => void;
+  checkpoint: (why?: CheckpointReason) => void;
 
   setTopCell: (
     playerId: number,
@@ -29,9 +34,6 @@ type GameActions = {
     key: BottomKey,
     data: Partial<BottomCombination> & { score?: number },
   ) => void;
-
-  recordThrow: (throwData: Throw) => void;
-  checkpoint: (why?: 'registration' | 'turn' | 'round' | 'manual' | 'unload' | 'finish') => void;
 };
 
 export const useGameStore = create<GameState & GameActions>()(
@@ -53,6 +55,8 @@ export const useGameStore = create<GameState & GameActions>()(
         })),
         placement: [],
         round: 1,
+        activePlayer: { ...players[0], index: 0 },
+        maxRounds: 15,
         isFinished: false,
         startedAt: nowISO(),
         endedAt: null,
@@ -80,6 +84,18 @@ export const useGameStore = create<GameState & GameActions>()(
       }
     },
 
+    setActivePlayer(index: number) {
+      set(state => {
+        if (!state.game) return;
+
+        state.game.activePlayer = {
+          id: state.game.players[index].id,
+          name: state.game.players[index].name,
+          index: index,
+        };
+      });
+    },
+
     resetGame() {
       set(state => {
         state.game = null;
@@ -102,7 +118,6 @@ export const useGameStore = create<GameState & GameActions>()(
         const currentGame = state.game;
         if (!currentGame) return;
 
-        currentGame.isFinished = true;
         currentGame.endedAt = nowISO();
 
         const sortedPlayers = [...currentGame.players].sort(
@@ -119,6 +134,41 @@ export const useGameStore = create<GameState & GameActions>()(
       get().checkpoint('finish');
     },
 
+    saveAndReset() {
+      const currentGame = get().game;
+      if (!currentGame) return;
+
+      const finishedGame = {
+        ...currentGame,
+        endedAt: currentGame.endedAt ?? nowISO(),
+      };
+
+      try {
+        const storedHistory = localStorage.getItem(STORAGE.history);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const parsedHistory: any[] = storedHistory ? JSON.parse(storedHistory) : [];
+        const historyArray = Array.isArray(parsedHistory) ? parsedHistory : [];
+        const historyWithoutDuplicates = historyArray.filter(game => game?.id !== finishedGame.id);
+
+        historyWithoutDuplicates.unshift(finishedGame);
+        localStorage.setItem(STORAGE.history, JSON.stringify(historyWithoutDuplicates));
+        currentGame.isFinished = true;
+      } catch (error) {
+        console.error('❌ Saving game history failed:', error);
+      }
+
+      set(state => {
+        state.game = null;
+        state.lastThrows = [];
+      });
+
+      try {
+        localStorage.removeItem(STORAGE.currentGame);
+      } catch (error) {
+        console.error('⚠️ Failed to clear game data:', error);
+      }
+    },
+
     setTopCell(playerId, key, data) {
       set((state: GameState) => {
         const game = state.game;
@@ -128,7 +178,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
         if (!player) return;
 
-        const cell = player.game.top[key];
+        const cell = player.game.top.combinations[key];
         Object.assign(cell, data);
         recalcOverall(player);
       });
@@ -142,18 +192,9 @@ export const useGameStore = create<GameState & GameActions>()(
         const player = game.players.find(p => p.id === playerId);
         if (!player) return;
 
-        const cell = player.game.bottom[key];
+        const cell = player.game.bottom.combinations[key];
         Object.assign(cell, data);
         recalcOverall(player);
-      });
-    },
-
-    recordThrow(throwData) {
-      set((state: GameState) => {
-        state.lastThrows.unshift(throwData);
-        if (state.lastThrows.length > 10) {
-          state.lastThrows.pop();
-        }
       });
     },
 

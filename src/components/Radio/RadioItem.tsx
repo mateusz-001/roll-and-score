@@ -21,14 +21,14 @@ export const RadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
       <label
         htmlFor={id}
         className={cn(
-          'group inline-flex items-start gap-3 text-sm',
+          'relative group flex items-start gap-3 text-sm',
           disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
           className,
         )}
       >
         <span
           className={cn(
-            'relative h-5 w-5 shrink-0 rounded-full border-2',
+            'relative mt-[1px] h-5 w-5 shrink-0 rounded-full border-2',
             ' bg-white duration-200',
             checked ? 'border-primary' : 'border-dark-gray',
             'has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-primary/25',
@@ -58,7 +58,7 @@ export const RadioItem = React.forwardRef<HTMLInputElement, RadioProps>(
             />
           </span>
         </span>
-        <span className="flex min-w-0 flex-col text-left">
+        <span className="flex flex-col text-left">
           <span className="text-body-base font-medium">{label}</span>
           {caption ? (
             <span id={`${id}-caption`} className="text-body-xs font-normal italic text-dark-gray">

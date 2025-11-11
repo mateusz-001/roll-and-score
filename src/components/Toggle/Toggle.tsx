@@ -63,7 +63,7 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
         <span
           aria-hidden
           className={cn(
-            'relative mt-0.5 inline-flex h-6 w-10 select-none items-center rounded-full',
+            'relative inline-flex h-6 w-10 select-none items-center rounded-full',
             'bg-gray transition-colors',
             'peer-checked:bg-primary',
             'peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary',
