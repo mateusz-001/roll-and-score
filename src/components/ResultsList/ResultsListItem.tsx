@@ -22,7 +22,7 @@ export const ResultsListItem: React.FC<Props> = ({ game }) => {
 
   return (
     <motion.li
-      className="flex flex-col gap-2 rounded-2xl bg-white/80 border border-secondary px-2 py-2 shadow-md md:py-3 md:px-4 cursor-pointer"
+      className="flex flex-col gap-2 rounded-2xl bg-white/80 border border-secondary px-2 py-2 shadow-md md:py-3 md:px-4"
       initial={false}
       transition={{ type: 'spring', stiffness: 260, damping: 24 }}
     >
