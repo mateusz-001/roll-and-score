@@ -5,6 +5,7 @@ interface Props {
   className?: string;
   y?: number;
   duration?: number;
+  delay?: number;
 }
 
 export const AnimationSlideUp: React.FC<React.PropsWithChildren<Props>> = ({
@@ -12,6 +13,7 @@ export const AnimationSlideUp: React.FC<React.PropsWithChildren<Props>> = ({
   className,
   y = 14,
   duration = 0.4,
+  delay = 0,
 }) => {
   const item: Variants = {
     initial: { opacity: 0, y, filter: 'blur(2px)' },
@@ -19,7 +21,7 @@ export const AnimationSlideUp: React.FC<React.PropsWithChildren<Props>> = ({
       opacity: 1,
       y: 0,
       filter: 'blur(0px)',
-      transition: { duration, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration, delay, ease: [0.22, 1, 0.36, 1] },
     },
   };
 

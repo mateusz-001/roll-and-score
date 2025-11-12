@@ -7,10 +7,11 @@ interface Props {
   to: string;
   icon: React.ReactNode;
   label: string;
+  labelMobile: string;
   className?: string;
 }
 
-export const Navlink: React.FC<Props> = ({ to, icon, label, className }) => {
+export const Navlink: React.FC<Props> = ({ to, icon, label, labelMobile, className }) => {
   const [isLinkActive, setIsLinkActive] = React.useState(false);
 
   return (
@@ -40,7 +41,8 @@ export const Navlink: React.FC<Props> = ({ to, icon, label, className }) => {
       >
         {icon}
       </div>
-      {label}
+      <span className="max-lg:hidden lg:inline-block">{label}</span>
+      {labelMobile && <span className="lg:hidden">{labelMobile}</span>}
     </NavLink>
   );
 };
