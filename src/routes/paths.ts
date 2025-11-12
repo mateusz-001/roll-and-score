@@ -3,4 +3,5 @@ export const paths = {
   game: '/game',
   results: '/results',
   hof: '/hall-of-fame',
+  reset: '/reset',
 };

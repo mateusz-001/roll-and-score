@@ -14,3 +14,4 @@ export * from './getRankLabel';
 export * from './readHistoryFromStorage';
 export * from './getGameDuration';
 export * from './formatDate';
+export * from './removeFromLocalStorage';

@@ -5,14 +5,24 @@ import { PageCard } from '@/components/PageCard';
 import { PageWrapper } from '@/components/PageWrapper';
 import { Paragraph } from '@/components/Paragraph';
 import { StatCard } from '@/components/StatCard';
-import { useHallOfFameStats } from '@/hooks';
+import { useConfetti, useHallOfFameStats } from '@/hooks';
 import { formatDate } from '@/utils';
 
 import { Header } from './Header';
 
 export const HallOfFamePage: React.FC = () => {
   const { stats } = useHallOfFameStats();
+  const { burst } = useConfetti();
+
   const hasGames = (stats?.totalGames ?? 0) > 0;
+
+  React.useEffect(() => {
+    if (!hasGames) return;
+
+    const timer = setTimeout(() => burst(), 300);
+
+    return () => clearTimeout(timer);
+  }, [hasGames]);
 
   if (!hasGames) {
     return (
