@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/Button';
 import { Heading } from '@/components/Heading';
 import { Paragraph } from '@/components/Paragraph';
+import { useConfetti } from '@/hooks';
 import { useGameStore } from '@/store/gameStore';
 import { Game } from '@/types/game';
 import { buildRankedPlayers } from '@/utils';
@@ -15,8 +16,16 @@ interface Props {
 
 export const FinalPlacements: React.FC<Props> = ({ placement }) => {
   const { saveAndReset } = useGameStore();
+  const { burst } = useConfetti();
 
   const rankedPlayers = React.useMemo(() => buildRankedPlayers(placement), [placement]);
+  const playersCount = rankedPlayers.length;
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => burst(), 300);
+
+    return () => clearTimeout(timer);
+  }, [playersCount, burst]);
 
   if (!rankedPlayers.length) {
     return (
@@ -42,8 +51,8 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
       </header>
 
       <ul className="w-full max-w-[400px]">
-        {rankedPlayers.map(player => (
-          <PlayerListItem key={player.id} player={player} />
+        {rankedPlayers.map((player, index) => (
+          <PlayerListItem key={player.id} player={player} index={index} />
         ))}
       </ul>
 

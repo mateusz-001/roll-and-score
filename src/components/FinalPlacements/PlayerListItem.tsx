@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 
 import { getRankLabel, RankedPlayer } from '@/utils';
@@ -8,13 +9,21 @@ const PLACEMENT_EMOJIS = ['🥇', '🥈', '🥉'];
 
 interface Props {
   player: RankedPlayer;
+  index: number;
 }
 
-export const PlayerListItem: React.FC<Props> = ({ player }) => {
+export const PlayerListItem: React.FC<Props> = ({ player, index }) => {
   return (
-    <li
+    <motion.li
       key={player.id}
       className="w-full flex items-center justify-between border-b-2 border-gray/50 pb-2 mb-2 last:mb-0 last:border-0"
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: index * 1,
+        ease: 'easeInOut',
+        duration: 0.5,
+      }}
     >
       <div className="flex items-center mr-4">
         <div className="text-[32px] min-w-[40px] text-center">
@@ -34,6 +43,6 @@ export const PlayerListItem: React.FC<Props> = ({ player }) => {
           {player.score} pkt
         </span>
       </div>
-    </li>
+    </motion.li>
   );
 };

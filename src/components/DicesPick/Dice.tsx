@@ -17,7 +17,7 @@ export const Dice: React.FC<Props> = ({ index, selectedDices, handleSetDices }) 
       <Paragraph size="small" className="italic">
         {index + 1} kość:
       </Paragraph>
-      <div className="flex gap-2 overflow-y-visible md:gap-3 lg:gap-4">
+      <div className="flex gap-2 overflow-y-visible px-1 md:gap-3 lg:gap-4">
         {Array.from({ length: MAX_DICE_VALUE }, (_, i) => i + 1).map(face => {
           const DiceIcon = DICE_ICONS[face];
           const isSelected = selectedDices[index] === face;

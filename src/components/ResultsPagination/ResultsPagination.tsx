@@ -26,7 +26,7 @@ export const ResultsPagination: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex items-center justify-center gap-2 mt-3 md:mt-4">
-      <Button variant="ghost" size="sm" onClick={prevPage} disabled={!hasPrev}>
+      <Button key={page - 1} variant="ghost" size="sm" onClick={prevPage} disabled={!hasPrev}>
         <ArrowLeft className="w-4" />
       </Button>
 
@@ -45,7 +45,7 @@ export const ResultsPagination: React.FC<Props> = ({
         </button>
       ))}
 
-      <Button variant="ghost" size="sm" onClick={nextPage} disabled={!hasNext}>
+      <Button key={page + 1} variant="ghost" size="sm" onClick={nextPage} disabled={!hasNext}>
         <ArrowRight className="w-4" />
       </Button>
     </div>

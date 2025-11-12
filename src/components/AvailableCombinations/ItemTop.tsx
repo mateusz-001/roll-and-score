@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 
 import { AvailableTop, cn } from '@/utils';
@@ -8,15 +9,28 @@ interface Props {
   combination: AvailableTop;
   selectedCombination: string | null;
   setSelectedCombination: (value: string | null) => void;
+  index: number;
 }
 
 export const ItemTop: React.FC<Props> = ({
   combination,
   setSelectedCombination,
   selectedCombination,
+  index,
 }) => {
   return (
-    <li key={combination.combination} className="mb-3 last:mb-0">
+    <motion.li
+      key={combination.combination}
+      className="mb-3 last:mb-0"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{
+        delay: index * 0.1,
+        ease: 'easeInOut',
+        duration: 0.2,
+      }}
+    >
       <RadioItem
         name="points-combination"
         value={combination.combination}
@@ -44,6 +58,6 @@ export const ItemTop: React.FC<Props> = ({
           </div>
         }
       />
-    </li>
+    </motion.li>
   );
 };

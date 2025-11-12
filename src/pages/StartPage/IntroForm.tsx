@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Dices, Plus, Trash } from 'lucide-react';
 import React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { redirect } from 'react-router-dom';
 
+import { AnimationFormScale } from '@/components/Animations';
 import { Button } from '@/components/Button';
 import { Heading } from '@/components/Heading';
 import { Input } from '@/components/Input';
@@ -69,7 +71,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-card border-2 border-secondary max-w-2xl mx-auto md:p-6">
+    <AnimationFormScale>
       <Heading level="h2">Rejestracja graczy</Heading>
       <Paragraph size="small" className="italic !text-xs mt-1 md:mt-2">
         Dodaj od {MIN_PLAYERS} do {MAX_PLAYERS} graczy.
@@ -80,28 +82,30 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
           className="flex flex-col gap-3 mt-4 md:gap-4 md:mt-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {fields.map((f, index) => (
-            <div key={f.id} className="flex gap-3 items-center">
-              <Input
-                name={`players.${index}.name`}
-                control={control}
-                label={`Nazwa Gracza ${index + 1}`}
-                placeholder={`Nazwa gracza ${index + 1}`}
-                required
-                rules={{ required: 'Nazwa gracza jest wymagana' }}
-              />
-              <Button
-                type="button"
-                variant="danger"
-                size="sm"
-                onClick={() => handleRemove(index)}
-                disabled={!canRemove}
-                title={!canRemove ? `Minimalna liczba graczy to ${MIN_PLAYERS}` : undefined}
-              >
-                <Trash className="h-5 w-5" />
-              </Button>
-            </div>
-          ))}
+          <AnimatePresence initial={false}>
+            {fields.map((f, index) => (
+              <div key={f.id} className="flex gap-3 items-center">
+                <Input
+                  name={`players.${index}.name`}
+                  control={control}
+                  label={`Nazwa Gracza ${index + 1}`}
+                  placeholder={`Nazwa gracza ${index + 1}`}
+                  required
+                  rules={{ required: 'Nazwa gracza jest wymagana' }}
+                />
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleRemove(index)}
+                  disabled={!canRemove}
+                  title={!canRemove ? `Minimalna liczba graczy to ${MIN_PLAYERS}` : undefined}
+                >
+                  <Trash className="h-5 w-5" />
+                </Button>
+              </div>
+            ))}
+          </AnimatePresence>
 
           <div className="flex justify-end">
             <Button
@@ -127,6 +131,6 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
           </div>
         </form>
       </FormProvider>
-    </div>
+    </AnimationFormScale>
   );
 };
