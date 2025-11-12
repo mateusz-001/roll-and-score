@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { Heading } from '@/components/Heading';
 import { Paragraph } from '@/components/Paragraph';
-import React from 'react';
 
 export const Header: React.FC = () => {
   return (
