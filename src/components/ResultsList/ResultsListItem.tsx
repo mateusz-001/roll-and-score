@@ -10,9 +10,11 @@ import { ResultsTabs } from '../ResultsTabs';
 
 interface Props {
   game: Game;
+  delay?: number;
+  index: number;
 }
 
-export const ResultsListItem: React.FC<Props> = ({ game }) => {
+export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
   const { id, startedAt, endedAt, placement } = game;
   const firstPlace = placement && placement.length > 0 ? placement[0] : null;
 
@@ -23,8 +25,13 @@ export const ResultsListItem: React.FC<Props> = ({ game }) => {
   return (
     <motion.li
       className="flex flex-col gap-2 rounded-2xl bg-white/80 border border-secondary px-2 py-2 shadow-md md:py-3 md:px-4"
-      initial={false}
-      transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{
+        delay: index * 0.15,
+        ease: 'easeInOut',
+        duration: 0.3,
+      }}
     >
       <div className="flex items-start justify-between gap-3" onClick={handleToggleAccordion}>
         <div className="flex flex-col gap-2">

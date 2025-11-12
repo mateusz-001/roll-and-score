@@ -11,7 +11,7 @@ import { Header } from './Header';
 
 export const ResultsPage: React.FC = () => {
   const { items, page, pages, hasPrev, hasNext, prevPage, nextPage, goToPage } =
-    useHistoryPagination(5);
+    useHistoryPagination(2);
 
   const hasResults = items.length > 0;
 
