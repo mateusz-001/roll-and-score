@@ -31,7 +31,7 @@ export const DicesPick: React.FC<Props> = ({
   handleToggleFirstThrow,
 }) => {
   return (
-    <section className="p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
+    <section className="overflow-visible p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
       <Heading level="h4" className="text-primary mb-2 md:mb-3">
         Rzut
       </Heading>
