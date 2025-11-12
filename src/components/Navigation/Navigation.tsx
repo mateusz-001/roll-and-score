@@ -1,4 +1,4 @@
-import { Crown, Dices, Gamepad2, House } from 'lucide-react';
+import { Crown, Dices, Gamepad2, House, RefreshCcw } from 'lucide-react';
 import React from 'react';
 
 import { Navlink } from './Navlink';
@@ -8,16 +8,19 @@ export const Navigation: React.FC = () => {
     <nav className="bg-white border-1 border-primary text-dark-card p-1 max-md:fixed max-md:bottom-0 max-md:inset-x-0 max-md:mx-auto max-md:z-50 max-md:rounded-t-md md:h-auto md:max-h-screen md:rounded-lg md:p-3 md:m-4 md:shadow-2xl lg:p-4">
       <ul className="flex max-md:justify-between max-md:w-full md:flex-col lg:gap-2.5">
         <li>
-          <Navlink to="/" icon={<House />} label="Home" />
+          <Navlink to="/" icon={<House />} label="Home" labelMobile="Home" />
         </li>
         <li>
-          <Navlink to="/game" icon={<Dices />} label="Game" />
+          <Navlink to="/game" icon={<Dices />} label="Game" labelMobile="Game" />
         </li>
         <li>
-          <Navlink to="/results" icon={<Gamepad2 />} label="Results" />
+          <Navlink to="/results" icon={<Gamepad2 />} label="Results" labelMobile="Results" />
         </li>
         <li>
-          <Navlink to="/hall-of-fame" icon={<Crown />} label="Hall of Fame" />
+          <Navlink to="/hall-of-fame" icon={<Crown />} label="Hall of Fame" labelMobile="HoF" />
+        </li>
+        <li>
+          <Navlink to="/reset" icon={<RefreshCcw />} label="Reset" labelMobile="Reset" />
         </li>
       </ul>
     </nav>

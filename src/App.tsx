@@ -5,6 +5,7 @@ import { Navigation } from './components/Navigation';
 import { PageTransition } from './components/PageTransition';
 import { GamePage } from './pages/GamePage';
 import { HallOfFamePage } from './pages/HallOfFamePage';
+import { ResetPage } from './pages/ResetPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { StartPage } from './pages/StartPage';
 import { RequireGameActive, RequireNoGame } from './route-wrappers';
@@ -57,6 +58,14 @@ export default function App() {
               element={
                 <PageTransition>
                   <HallOfFamePage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path={paths.reset}
+              element={
+                <PageTransition>
+                  <ResetPage />
                 </PageTransition>
               }
             />
