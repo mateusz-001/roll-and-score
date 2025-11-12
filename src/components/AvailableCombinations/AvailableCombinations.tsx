@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 import { Heading } from '@/components/Heading';
@@ -59,12 +60,13 @@ export const AvailableCombinations: React.FC<Props> = ({
               </Paragraph>
             </div>
             <ul>
-              {availableCombinations.top.map(combination => (
+              {availableCombinations.top.map((combination, index) => (
                 <ItemTop
                   key={combination.combination}
                   combination={combination}
                   selectedCombination={selectedCombination}
                   setSelectedCombination={setSelectedCombination}
+                  index={index}
                 />
               ))}
             </ul>
@@ -76,13 +78,14 @@ export const AvailableCombinations: React.FC<Props> = ({
               Dół
             </Heading>
             <ul>
-              {availableCombinations.bottom.map(combination => (
+              {availableCombinations.bottom.map((combination, index) => (
                 <ItemBottom
                   key={combination.combination}
                   combination={combination}
                   selectedCombination={selectedCombination}
                   setSelectedCombination={setSelectedCombination}
                   showPoints={showPoints}
+                  index={index}
                 />
               ))}
             </ul>
@@ -97,22 +100,26 @@ export const AvailableCombinations: React.FC<Props> = ({
               </Paragraph>
             </div>
             <ul>
-              {combinationsCanBeSetToNull.bottom.map(combination => (
-                <ItemToSetNull
-                  key={combination}
-                  combination={combination}
-                  selectedCombination={selectedCombination}
-                  setSelectedCombination={setSelectedCombination}
-                />
-              ))}
-              {combinationsCanBeSetToNull.top.map(combination => (
-                <ItemToSetNull
-                  key={combination}
-                  combination={combination}
-                  selectedCombination={selectedCombination}
-                  setSelectedCombination={setSelectedCombination}
-                />
-              ))}
+              <AnimatePresence>
+                {combinationsCanBeSetToNull.bottom.map((combination, index) => (
+                  <ItemToSetNull
+                    key={combination}
+                    combination={combination}
+                    selectedCombination={selectedCombination}
+                    setSelectedCombination={setSelectedCombination}
+                    index={index}
+                  />
+                ))}
+                {combinationsCanBeSetToNull.top.map((combination, index) => (
+                  <ItemToSetNull
+                    key={combination}
+                    combination={combination}
+                    selectedCombination={selectedCombination}
+                    setSelectedCombination={setSelectedCombination}
+                    index={index}
+                  />
+                ))}
+              </AnimatePresence>
             </ul>
           </>
         )}
