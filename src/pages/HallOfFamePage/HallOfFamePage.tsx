@@ -12,7 +12,6 @@ import { Header } from './Header';
 
 export const HallOfFamePage: React.FC = () => {
   const { stats } = useHallOfFameStats();
-
   const hasGames = (stats?.totalGames ?? 0) > 0;
 
   if (!hasGames) {
@@ -48,12 +47,14 @@ export const HallOfFamePage: React.FC = () => {
     <PageWrapper className="relative h-screen">
       <PageCard>
         <Header totalGames={stats?.totalGames ?? 0} />
-        <main className="flex flex-col gap-3 md:gap-4">
+        <main className="grid grid-cols-1 gap-3 md:grid-cols-2 ">
           {hasHighestScoreEver && (
             <StatCard
               title="Najwyższy wynik"
               description="Najwyższy wynik wszech czasów uzyskany w jednej grze"
               icon="🏆"
+              className="col-span-1 md:col-span-2"
+              delay={0.2}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 {highestScoreEver?.playerName}{' '}
@@ -71,6 +72,7 @@ export const HallOfFamePage: React.FC = () => {
               title="Najdłuższa seria zwycięstw"
               description="Najwięcej kolejnych zwycięstw w grach"
               icon="🔥"
+              delay={0.7}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 {longestWinningStreak?.playerName}{' '}
@@ -85,6 +87,7 @@ export const HallOfFamePage: React.FC = () => {
               title="Najbardziej wyrównana gra"
               description="Gra z najmniejszą różnicą punktową między graczem o najwyższym i najniższym wynikiem"
               icon="⚖️"
+              delay={0.5}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 <span className="!text-body-lg flex items-center px-1 rounded-sm bg-green-100 text-green-500 font-sans font-semibold">
@@ -106,6 +109,8 @@ export const HallOfFamePage: React.FC = () => {
               title="Najbardziej niewyrównana gra"
               description="Gra z największą różnicą punktową między graczem o najwyższym i najniższym wynikiem"
               icon="⚖️"
+              className="col-span-1 md:col-span-2"
+              delay={0.5}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 <span className="!text-body-lg flex items-center px-1 rounded-sm bg-green-100 text-green-500 font-sans font-semibold">
@@ -127,6 +132,7 @@ export const HallOfFamePage: React.FC = () => {
               title="Król góry tabeli"
               description="Gracz z najwyższym wynikiem w górnej tabeli"
               icon="☝️"
+              delay={0.4}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 {topSectionKing?.playerName}{' '}
@@ -144,6 +150,7 @@ export const HallOfFamePage: React.FC = () => {
               title="Król sekcji dolnej"
               description="Gracz z najwyższym wynikiem w dolnej tabeli"
               icon="👇"
+              delay={0.9}
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 {bottomSectionKing?.playerName}{' '}

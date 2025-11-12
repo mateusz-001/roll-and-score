@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
 import { AvailableBottom, cn } from '@/utils';
@@ -9,6 +10,7 @@ interface Props {
   selectedCombination: string | null;
   setSelectedCombination: (value: string | null) => void;
   showPoints: boolean;
+  index: number;
 }
 
 export const ItemBottom: React.FC<Props> = ({
@@ -16,9 +18,21 @@ export const ItemBottom: React.FC<Props> = ({
   setSelectedCombination,
   selectedCombination,
   showPoints,
+  index,
 }) => {
   return (
-    <li key={combination.combination} className="mb-3 last:mb-0">
+    <motion.li
+      key={combination.combination}
+      className="mb-3 last:mb-0"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{
+        delay: index * 0.1,
+        ease: 'easeInOut',
+        duration: 0.2,
+      }}
+    >
       <RadioItem
         name="points-combination"
         value={combination.combination}
@@ -27,25 +41,30 @@ export const ItemBottom: React.FC<Props> = ({
         label={
           <div>
             <span>{combination.combination.toUpperCase()}</span>
-            {showPoints && (
-              <span
-                className={cn(
-                  'absolute right-0 top-1/2 transform -translate-y-1/2 flex items-center justify-center text-sm px-1 h-6 rounded-sm',
-                  combination.effectiveValue > 0
-                    ? 'text-green-500 bg-green-100'
-                    : 'text-red-500 bg-red-100',
-                )}
-              >
-                <strong>
-                  {combination.effectiveValue > 0
-                    ? `+${combination.effectiveValue}`
-                    : combination.effectiveValue}
-                </strong>
-              </span>
-            )}
+            <AnimatePresence>
+              {showPoints && (
+                <motion.span
+                  className={cn(
+                    'absolute right-0 top-1/2 transform -translate-y-1/2 flex items-center justify-center text-sm px-1 h-6 rounded-sm',
+                    combination.effectiveValue > 0
+                      ? 'text-green-500 bg-green-100'
+                      : 'text-red-500 bg-red-100',
+                  )}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.2 } }}
+                  exit={{ opacity: 0 }}
+                >
+                  <strong>
+                    {combination.effectiveValue > 0
+                      ? `+${combination.effectiveValue}`
+                      : combination.effectiveValue}
+                  </strong>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
         }
       />
-    </li>
+    </motion.li>
   );
 };

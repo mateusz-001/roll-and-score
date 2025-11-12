@@ -1,5 +1,7 @@
+import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
+import { AnimationSlideUp } from '@/components/Animations';
 import { AvailableCombinations } from '@/components/AvailableCombinations';
 import { Button } from '@/components/Button';
 import { DicesPick } from '@/components/DicesPick';
@@ -103,6 +105,12 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
     setSelectedCombination(null);
   }, [availableCombinations.top, availableCombinations.bottom]);
 
+  React.useEffect(() => {
+    if (game.round === game.maxRounds && !hasNextPlayer) {
+      setShowFinalResults(true);
+    }
+  }, [game.round, game.maxRounds, hasNextPlayer]);
+
   return (
     <PageWrapper className="relative h-screen">
       <PageCard>
@@ -121,7 +129,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                 handleToggleFirstThrow={handleToggleFirstThrow}
               />
               {filteredDices.length === 5 && (
-                <>
+                <AnimationSlideUp>
                   <AvailableCombinations
                     showPoints={showPoints}
                     handleToggleShowPoints={handleToggleShowPoints}
@@ -134,7 +142,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                     combinationsCanBeSetToNull={combinationsCanBeSetToNull}
                   />
                   <Button
-                    className="w-full"
+                    className="w-full mt-3 md:mt-4 lg:mt-6"
                     variant="primary"
                     size="lg"
                     onClick={handleSwitchToNextPlayer}
@@ -146,7 +154,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                         ? 'Przejdź do następnego gracza'
                         : 'Następna runda'}
                   </Button>
-                </>
+                </AnimationSlideUp>
               )}
               {hasAvailableCombinations && (
                 <MissingCombinations
@@ -157,7 +165,13 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
             </main>
           </>
         )}
-        {showFinalResults && <FinalPlacements placement={game.placement} />}
+        <AnimatePresence mode="wait">
+          {showFinalResults && (
+            <AnimationSlideUp>
+              <FinalPlacements placement={game.placement} />
+            </AnimationSlideUp>
+          )}
+        </AnimatePresence>
       </PageCard>
     </PageWrapper>
   );
