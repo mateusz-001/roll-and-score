@@ -8,11 +8,14 @@ interface Props {
   description: string;
   icon: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
 }
 
-export const StatCard: React.FC<Props> = ({ title, description, icon, children }) => {
+export const StatCard: React.FC<Props> = ({ title, description, icon, children, className }) => {
   return (
-    <div className="statcard-gradient-border rounded-2xl bg-white/80 border border-transparent px-2 py-2 shadow-md md:py-3 md:px-4">
+    <div
+      className={`statcard-gradient-border rounded-2xl bg-white/80 border border-transparent px-2 py-2 shadow-md md:py-3 md:px-4 ${className}`}
+    >
       <div className="text-center">
         <div className="flex items-center justify-center gap-2">
           <div className="text-lg">{icon}</div>

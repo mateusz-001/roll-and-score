@@ -48,12 +48,13 @@ export const HallOfFamePage: React.FC = () => {
     <PageWrapper className="relative h-screen">
       <PageCard>
         <Header totalGames={stats?.totalGames ?? 0} />
-        <main className="flex flex-col gap-3 md:gap-4">
+        <main className="grid grid-cols-1 gap-3 md:grid-cols-2 ">
           {hasHighestScoreEver && (
             <StatCard
               title="Najwyższy wynik"
               description="Najwyższy wynik wszech czasów uzyskany w jednej grze"
               icon="🏆"
+              className="col-span-1 md:col-span-2"
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 {highestScoreEver?.playerName}{' '}
@@ -106,6 +107,7 @@ export const HallOfFamePage: React.FC = () => {
               title="Najbardziej niewyrównana gra"
               description="Gra z największą różnicą punktową między graczem o najwyższym i najniższym wynikiem"
               icon="⚖️"
+              className="col-span-1 md:col-span-2"
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 <span className="!text-body-lg flex items-center px-1 rounded-sm bg-green-100 text-green-500 font-sans font-semibold">
