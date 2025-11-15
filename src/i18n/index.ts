@@ -6,19 +6,20 @@ import enCommon from '@/i18n/en/common.json';
 import enGame from '@/i18n/en/game.json';
 import plCommon from '@/i18n/pl/common.json';
 import plGame from '@/i18n/pl/game.json';
+import plStart from '@/i18n/pl/start.json';
 
 void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      en: { common: enCommon, game: enGame },
-      pl: { common: plCommon, game: plGame },
+      en: { common: enCommon, game: enGame, start: {} },
+      pl: { common: plCommon, game: plGame, start: plStart },
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'pl'],
     defaultNS: 'common',
-    ns: ['common', 'game'],
+    ns: ['common', 'game', 'start'],
     interpolation: { escapeValue: false },
     detection: {
       order: ['localStorage', 'navigator'],
