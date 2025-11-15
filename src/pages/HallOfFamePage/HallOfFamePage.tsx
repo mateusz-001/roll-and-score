@@ -30,7 +30,7 @@ export const HallOfFamePage: React.FC = () => {
         <PageCard>
           <Header totalGames={stats?.totalGames ?? 0} />
           <main className="mt-6">
-            <p className="text-center">Brak graczy w Hall of Fame.</p>
+            <Paragraph className="text-center">Brak graczy w Hall of Fame.</Paragraph>
           </main>
         </PageCard>
       </PageWrapper>
