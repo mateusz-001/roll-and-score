@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   AnimationDiceSpring,
@@ -14,29 +15,30 @@ interface Props {
 }
 
 export const Intro: React.FC<Props> = ({ handleSetShowForm }) => {
+  const { t } = useTranslation(['start', 'common']);
+
   return (
     <div>
       <div className="grid items-center gap-10 md:grid-cols-[1.2fr_.8fr]">
         <AnimationStaggerChildren>
           <AnimationSlideUp>
             <Heading level="h1">
-              Roll.
+              {t('start:roll')}.
               <br />
-              <span className="text-primary">Score.</span>
+              <span className="text-primary">{t('start:score')}.</span>
               <br />
-              Repeat.
+              {t('start:repeat')}.
             </Heading>
           </AnimationSlideUp>
           <AnimationSlideUp>
             <Paragraph size="regular" className="mt-4 md:mt-6 lg:max-w-md">
-              Zapisuj wyniki gry w kości z rodziną i znajomymi — bez papieru, bez chaosu, z pełnym
-              vibe’em. Prosty scoreboard z lokalnym zapisem i czytelnym UI.
+              {t('start:description')}
             </Paragraph>
           </AnimationSlideUp>
           <AnimationSlideUp>
             <div className="mt-4 flex flex-wrap gap-3 md:mt-6">
               <Button size="lg" onClick={handleSetShowForm}>
-                Zacznij grę
+                {t('common:buttons.start_game')}
               </Button>
             </div>
           </AnimationSlideUp>

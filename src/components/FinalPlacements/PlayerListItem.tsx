@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getRankLabel, RankedPlayer } from '@/utils';
 
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export const PlayerListItem: React.FC<Props> = ({ player, index }) => {
+  const { t } = useTranslation('game');
+
   return (
     <motion.li
       key={player.id}
@@ -40,7 +43,7 @@ export const PlayerListItem: React.FC<Props> = ({ player, index }) => {
       </div>
       <div>
         <span className="font-semibold bg-green-100 text-green-500 px-2 py-1 rounded-sm">
-          {player.score} pkt
+          {player.score} {t('points')}
         </span>
       </div>
     </motion.li>

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { cn } from '@/utils';
+import { camelToSnakeCase, cn } from '@/utils';
 
 import { Paragraph } from '../Paragraph';
 
@@ -15,6 +17,8 @@ interface Props {
 }
 
 export const TabsListItemTop: React.FC<Props> = ({ label, combo, showBonus }) => {
+  const { t } = useTranslation('game');
+
   const hasBonusPositive = combo.bonus && combo.bonus > 0;
   const passedLabel = combo.isPassed ? '✅' : '❌';
 
@@ -22,7 +26,7 @@ export const TabsListItemTop: React.FC<Props> = ({ label, combo, showBonus }) =>
     <li className="flex items-center justify-between gap-3 py-2 border-b border-b-gray/50 last:border-b-0">
       <div className="flex items-center gap-2">
         <Paragraph size="small" weight="semibold" className="capitalize">
-          {label}
+          {t(`combos.${camelToSnakeCase(label)}` as any)}
         </Paragraph>
         <span className="text-body-xs">{passedLabel}</span>
       </div>

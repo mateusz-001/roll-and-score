@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { camelToSnakeCase } from '@/utils';
 
 import { RadioItem } from '../Radio';
 
@@ -16,6 +20,8 @@ export const ItemToSetNull: React.FC<Props> = ({
   setSelectedCombination,
   index,
 }) => {
+  const { t } = useTranslation('game');
+
   return (
     <motion.li
       key={combination}
@@ -32,7 +38,7 @@ export const ItemToSetNull: React.FC<Props> = ({
       <RadioItem
         name="points-combination"
         value={combination}
-        label={<div>{combination.toUpperCase()}</div>}
+        label={<div>{t(`combos.${camelToSnakeCase(combination)}` as any)}</div>}
         onCheckedChange={setSelectedCombination}
         checked={selectedCombination === combination}
       />

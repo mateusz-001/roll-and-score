@@ -1,5 +1,28 @@
 {
-  "nav": { "start": "Start", "game": "Game", "results": "Results", "hof": "Hall of Fame" },
-  "start": { "title": "Start a game" },
-  "actions": { "startGame": "Start", "finishGame": "Finish game" }
+  "nav": {
+    "home": "Home",
+    "game": "Game",
+    "results": "Results",
+    "hof": "Hall of Fame",
+    "settings": "Settings"
+  },
+  "buttons": {
+    "start_game": "Start Game",
+    "back": "Back",
+    "add": "Add",
+    "clear_history": "Clear Game History",
+    "reset_game": "Reset Game",
+    "finish_game": "Finish Game",
+    "next_player": "Next Player",
+    "next_round": "Next Round",
+    "save_exit": "Save and Exit",
+    "min_players": "Minimum number of players is {{min}}",
+    "max_players": "Maximum number of players is {{max}}"
+  },
+  "inputs": {
+    "player_name": {
+      "label": "Player Name {{number}}",
+      "required": "Player name is required"
+    }
+  }
 }

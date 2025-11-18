@@ -5,17 +5,14 @@ import { Heading } from '@/components/Heading';
 import { Paragraph } from '@/components/Paragraph';
 
 export const Header: React.FC = () => {
-  const { t } = useTranslation('results');
+  const { t } = useTranslation('settings');
 
   return (
     <header>
       <Heading level="h2" color="text-primary" className="text-center mb-3 md:mb-4">
         {t('header')}
       </Heading>
-      <Paragraph className="text-center">{t('subtitle')} 👑</Paragraph>
-      <Paragraph color="primary" className="text-center !text-body-xs">
-        {t('subtitle_2')} 😝
-      </Paragraph>
+      <Paragraph className="text-center">{t('description')}</Paragraph>
     </header>
   );
 };

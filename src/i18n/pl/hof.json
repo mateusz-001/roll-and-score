@@ -1,0 +1,23 @@
+{
+  "header": "Hall of fame",
+  "subtitle": "Miejsce gdzie trafiają najlepsi z najlepszych!",
+  "points": "pkt",
+  "wins": "Zwycięstw/a",
+  "winner": "Zwycięzca",
+  "players_count": "Liczba graczy",
+  "difference": "Rónica",
+  "played_games": "Rozegrano: {{count}} gier",
+  "no_players": "Brak graczy w Hall of Fame",
+  "card_1_title": "Najwyższy wynik",
+  "card_1_description": "Najwyższy wynik",
+  "card_2_title": "Najdłuższa seria zwycięstw",
+  "card_2_description": "Najwięcej kolejnych zwycięstw w grach",
+  "card_3_title": "Najbardziej wyrównana gra",
+  "card_3_description": "Gra z najmniejszą różnicą punktową między graczem o najwyższym i najniższym wynikiem",
+  "card_4_title": "Najbardziej niewyrównana gra",
+  "card_4_description": "Gra z największą różnicą punktową między graczem o najwyższym i najniższym wynikiem",
+  "card_5_title": "Król góry tabeli",
+  "card_5_description": "Gracz z najwyższym wynikiem w górnej tabeli",
+  "card_6_title": "Król sekcji dolnej",
+  "card_6_description": "Gracz z najwyższym wynikiem w dolnej tabeli"
+}

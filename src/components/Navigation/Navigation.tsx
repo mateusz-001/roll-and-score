@@ -1,26 +1,39 @@
 import { Crown, Dices, Gamepad2, House, RefreshCcw } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Navlink } from './Navlink';
 
 export const Navigation: React.FC = () => {
+  const { t } = useTranslation('common');
+
   return (
     <nav className="bg-white border-1 border-primary text-dark-card p-1 max-md:fixed max-md:bottom-0 max-md:inset-x-0 max-md:mx-auto max-md:z-50 max-md:rounded-t-md md:h-auto md:max-h-screen md:rounded-lg md:p-3 md:m-4 md:shadow-2xl lg:p-4">
       <ul className="flex max-md:justify-between max-md:w-full md:flex-col lg:gap-2.5">
         <li>
-          <Navlink to="/" icon={<House />} label="Home" labelMobile="Home" />
+          <Navlink to="/" icon={<House />} label={t('nav.home')} labelMobile={t('nav.home')} />
         </li>
         <li>
-          <Navlink to="/game" icon={<Dices />} label="Game" labelMobile="Game" />
+          <Navlink to="/game" icon={<Dices />} label={t('nav.game')} labelMobile={t('nav.game')} />
         </li>
         <li>
-          <Navlink to="/results" icon={<Gamepad2 />} label="Results" labelMobile="Results" />
+          <Navlink
+            to="/results"
+            icon={<Gamepad2 />}
+            label={t('nav.results')}
+            labelMobile={t('nav.results')}
+          />
         </li>
         <li>
-          <Navlink to="/hall-of-fame" icon={<Crown />} label="Hall of Fame" labelMobile="HoF" />
+          <Navlink to="/hall-of-fame" icon={<Crown />} label={t('nav.hof')} labelMobile="HoF" />
         </li>
         <li>
-          <Navlink to="/reset" icon={<RefreshCcw />} label="Reset" labelMobile="Reset" />
+          <Navlink
+            to="/reset"
+            icon={<RefreshCcw />}
+            label={t('nav.settings')}
+            labelMobile={t('nav.settings')}
+          />
         </li>
       </ul>
     </nav>

@@ -7,6 +7,7 @@ import { GamePage } from './pages/GamePage';
 import { HallOfFamePage } from './pages/HallOfFamePage';
 import { ResetPage } from './pages/ResetPage';
 import { ResultsPage } from './pages/ResultsPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { StartPage } from './pages/StartPage';
 import { RequireGameActive, RequireNoGame } from './route-wrappers';
 import { paths } from './routes/paths';
@@ -65,7 +66,7 @@ export default function App() {
               path={paths.reset}
               element={
                 <PageTransition>
-                  <ResetPage />
+                  <SettingsPage />
                 </PageTransition>
               }
             />
