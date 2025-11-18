@@ -1,10 +1,10 @@
 {
   "nav": {
-    "start": "Start",
+    "home": "Start",
     "game": "Gra",
     "results": "Wyniki",
     "hof": "Hall of Fame",
-    "setting": "Ustawienia"
+    "settings": "Ustawienia"
   },
   "buttons": {
     "start_game": "Rozpocznij grę",
