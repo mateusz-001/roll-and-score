@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Heading } from '@/components/Heading';
 import { Paragraph } from '@/components/Paragraph';
@@ -37,13 +38,15 @@ export const AvailableCombinations: React.FC<Props> = ({
   bonusPoints,
   combinationsCanBeSetToNull,
 }) => {
+  const { t } = useTranslation('game');
+
   return (
     <section className="p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
       <Heading level="h4" className="text-primary mb-2 md:mb-3">
-        Wybór kombinacji punktowej
+        {t('choose_combination')}
       </Heading>
       <Toggle
-        label="Pokaż punkty"
+        label={t('show_points')}
         checked={showPoints}
         className="!p-0 mb-4"
         onCheckedChange={handleToggleShowPoints}
@@ -53,10 +56,13 @@ export const AvailableCombinations: React.FC<Props> = ({
           <>
             <div className="flex items-center justify-between gap-4 mt-0.5 mb-2 md:mb-3">
               <Heading level="h4" className="text-dark">
-                Góra
+                {t('top')}
               </Heading>
               <Paragraph size="small" className="text-sm text-dark">
-                Bonus: <span className="text-primary font-semibold">{bonusPoints} pkt</span>
+                {t('bonus')}:{' '}
+                <span className="text-primary font-semibold">
+                  {bonusPoints} {t('points')}
+                </span>
               </Paragraph>
             </div>
             <ul>
@@ -75,7 +81,7 @@ export const AvailableCombinations: React.FC<Props> = ({
         {hasBottomAvailable && (
           <>
             <Heading level="h4" className="text-dark mb-1 mt-4 md:mb-3 md:mt-6">
-              Dół
+              {t('bottom')}
             </Heading>
             <ul>
               {availableCombinations.bottom.map((combination, index) => (
@@ -94,9 +100,9 @@ export const AvailableCombinations: React.FC<Props> = ({
         {!hasTopAvailable && !hasBottomAvailable && (
           <>
             <div className="text-dark mb-1 mt-4 md:mb-3 md:mt-6">
-              <Heading level="h4">Brak dostępnych kombinacji</Heading>
+              <Heading level="h4">{t('no_combinations')}</Heading>
               <Paragraph size="small" className="mt-2">
-                Wybierz kombinację do wykreślenia
+                {t('choose_to_set_null')}
               </Paragraph>
             </div>
             <ul>

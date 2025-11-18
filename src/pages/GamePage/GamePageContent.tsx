@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { AnimationSlideUp } from '@/components/Animations';
 import { AvailableCombinations } from '@/components/AvailableCombinations';
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export const GamePageContent: React.FC<Props> = ({ game }) => {
+  const { t } = useTranslation('common');
   const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame } = useGameStore();
 
   const [showFinalResults, setShowFinalResults] = React.useState(false);
@@ -149,10 +151,10 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                     disabled={!selectedCombination}
                   >
                     {isFinalRound && !hasNextPlayer
-                      ? 'Zakończ grę'
+                      ? t('buttons.finish_game')
                       : hasNextPlayer && !isFinalRound
-                        ? 'Przejdź do następnego gracza'
-                        : 'Następna runda'}
+                        ? t('buttons.next_player')
+                        : t('buttons.next_round')}
                   </Button>
                 </AnimationSlideUp>
               )}

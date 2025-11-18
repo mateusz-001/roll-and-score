@@ -1,5 +1,6 @@
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Heading } from '@/components/Heading';
 import { Toggle } from '@/components/Toggle';
@@ -30,10 +31,12 @@ export const DicesPick: React.FC<Props> = ({
   isFirstThrow,
   handleToggleFirstThrow,
 }) => {
+  const { t } = useTranslation('game');
+
   return (
     <section className="overflow-visible p-2 rounded-sm border-2 border-primary bg-slate-50 shadow-lg md:p-3">
       <Heading level="h4" className="text-primary mb-2 md:mb-3">
-        Rzut
+        {t('throw')}
       </Heading>
       <div className="flex flex-col gap-3 md:gap-4">
         <div className="overflow-x-auto pb-2">
@@ -47,7 +50,7 @@ export const DicesPick: React.FC<Props> = ({
           ))}
         </div>
         <Toggle
-          label="Rzuciłeś z ręki?"
+          label={t('is_first_throw')}
           checked={isFirstThrow}
           className="!p-0"
           onCheckedChange={handleToggleFirstThrow}
