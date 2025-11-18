@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Dices } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Game } from '@/types/game';
 import { formatDate, getGameDuration } from '@/utils';
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
+  const { t } = useTranslation('results');
+
   const { id, startedAt, endedAt, placement } = game;
   const firstPlace = placement && placement.length > 0 ? placement[0] : null;
 
@@ -36,13 +39,13 @@ export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
       <div className="flex items-start justify-between gap-3" onClick={handleToggleAccordion}>
         <div className="flex flex-col gap-2">
           <Paragraph size="small" className="!text-text/40">
-            Gra #{id}
+            {t('game')} #{id}
           </Paragraph>
 
           <div className="flex items-center justify-between">
             <Paragraph color="primary" className="flex items-center gap-1">
               <Dices className="inline-block" />
-              <span className="font-semibold">Data:</span>
+              <span className="font-semibold">{t('date')}:</span>
               <span className="font-normal text-text">{formatDate(startedAt)}</span>
             </Paragraph>
           </div>
@@ -55,7 +58,7 @@ export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
                 size="small"
                 className="flex items-center px-1 !text-green-500 bg-green-100 font-semibold rounded-sm"
               >
-                {firstPlace?.score} pkt
+                {firstPlace?.score} {t('points')}
               </Paragraph>
             </div>
           )}

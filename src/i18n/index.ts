@@ -6,6 +6,7 @@ import enCommon from '@/i18n/en/common.json';
 import enGame from '@/i18n/en/game.json';
 import plCommon from '@/i18n/pl/common.json';
 import plGame from '@/i18n/pl/game.json';
+import plResults from '@/i18n/pl/results.json';
 import plStart from '@/i18n/pl/start.json';
 
 void i18n
@@ -13,8 +14,8 @@ void i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: { common: enCommon, game: enGame, start: {} },
-      pl: { common: plCommon, game: plGame, start: plStart },
+      en: { common: enCommon, game: enGame, start: {}, results: {} },
+      pl: { common: plCommon, game: plGame, start: plStart, results: plResults },
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'pl'],
