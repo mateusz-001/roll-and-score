@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Game } from '@/types/game';
 import { cn } from '@/utils';
@@ -15,27 +16,29 @@ interface Props {
 }
 
 const TOP_COMBINATIONS = [
-  { key: 'one', label: '1' },
-  { key: 'two', label: '2' },
-  { key: 'three', label: '3' },
-  { key: 'four', label: '4' },
-  { key: 'five', label: '5' },
-  { key: 'six', label: '6' },
+  { key: 'one' },
+  { key: 'two' },
+  { key: 'three' },
+  { key: 'four' },
+  { key: 'five' },
+  { key: 'six' },
 ] as const;
 
 const BOTTOM_COMBINATIONS = [
-  { key: 'pair', label: 'pair' },
-  { key: 'doublePair', label: 'double pair' },
-  { key: 'triple', label: 'triple' },
-  { key: 'quadruple', label: 'quadruple' },
-  { key: 'smallStraight', label: 'small straight' },
-  { key: 'largeStraight', label: 'large straight' },
-  { key: 'full', label: 'full' },
-  { key: 'poker', label: 'poker' },
-  { key: 'chance', label: 'chance' },
+  { key: 'pair' },
+  { key: 'doublePair' },
+  { key: 'triple' },
+  { key: 'quadruple' },
+  { key: 'smallStraight' },
+  { key: 'largeStraight' },
+  { key: 'full' },
+  { key: 'poker' },
+  { key: 'chance' },
 ] as const;
 
 export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
+  const { t } = useTranslation('game');
+
   const [activePlayerId, setActivePlayerId] = React.useState(() => players[0]?.id ?? null);
 
   const activePlayer = players.find(player => player.id === activePlayerId) ?? null;
@@ -83,13 +86,13 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
             <div className="mt-2 flex items-center justify-between px-2 py-2 rounded-md bg-gray/20">
               <Heading level="h5">{activePlayer.name}</Heading>
               <span className="px-1 rounded-sm bg-green-100 text-green-500 font-semibold">
-                {activePlayer.game.overallScore} pkt
+                {activePlayer.game.overallScore} {t('points')}
               </span>
             </div>
 
             <SectionHeader label="Góra" score={activePlayer.game.top.score} />
             <ul className="px-2 flex flex-col gap-y-1">
-              {TOP_COMBINATIONS.map(({ key, label }) => {
+              {TOP_COMBINATIONS.map(({ key }) => {
                 const combo = activePlayer.game.top.combinations[key];
 
                 if (!combo) return null;
@@ -99,7 +102,7 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
                 return (
                   <TabsListItemTop
                     key={key}
-                    label={label}
+                    label={key}
                     combo={combo}
                     showBonus={showBonus ? true : false}
                   />
@@ -109,7 +112,7 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
 
             <SectionHeader label="Dół" score={activePlayer.game.bottom.score} className="mt-6" />
             <ul className="px-2 flex flex-col gap-y-1 mb-2">
-              {BOTTOM_COMBINATIONS.map(({ key, label }) => {
+              {BOTTOM_COMBINATIONS.map(({ key }) => {
                 const combo = activePlayer.game.bottom.combinations[key];
 
                 if (!combo) return null;
@@ -119,7 +122,7 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
                 return (
                   <TabsListItemBottom
                     key={key}
-                    label={label}
+                    label={key}
                     combo={combo}
                     showScore={showScore ?? false}
                   />

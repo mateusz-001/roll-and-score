@@ -1,0 +1,23 @@
+{
+  "header": "Hall of Fame",
+  "subtitle": "The place where the best of the best end up!",
+  "points": "pts",
+  "wins": "Win(s)",
+  "winner": "Winner",
+  "players_count": "Number of players",
+  "difference": "Difference",
+  "played_games": "Games played: {{count}}",
+  "no_players": "No players in the Hall of Fame",
+  "card_1_title": "Highest Score",
+  "card_1_description": "Highest overall score",
+  "card_2_title": "Longest Winning Streak",
+  "card_2_description": "Most consecutive game wins",
+  "card_3_title": "Most Balanced Game",
+  "card_3_description": "Game with the smallest point difference between the highest and lowest scoring players",
+  "card_4_title": "Most Unbalanced Game",
+  "card_4_description": "Game with the largest point difference between the highest and lowest scoring players",
+  "card_5_title": "Top Section King",
+  "card_5_description": "Player with the highest score in the top section",
+  "card_6_title": "Bottom Section King",
+  "card_6_description": "Player with the highest score in the bottom section"
+}

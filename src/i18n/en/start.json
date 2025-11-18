@@ -1,0 +1,8 @@
+{
+  "roll": "Roll",
+  "score": "Score",
+  "repeat": "Repeat",
+  "description": "Track dice game results with family and friends — no paper, no mess, full vibes. A simple scoreboard with local storage and a clean UI.",
+  "players_registration": "Player Registration",
+  "players_add": "Add from {{min}} to {{max}} players"
+}

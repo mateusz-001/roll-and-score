@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PageCard } from '@/components/PageCard';
 import { PageWrapper } from '@/components/PageWrapper';
@@ -10,6 +11,8 @@ import { useHistoryPagination } from '@/hooks/useHistoryPagination';
 import { Header } from './Header';
 
 export const ResultsPage: React.FC = () => {
+  const { t } = useTranslation('results');
+
   const { items, page, pages, hasPrev, hasNext, prevPage, nextPage, goToPage } =
     useHistoryPagination(5);
 
@@ -34,7 +37,7 @@ export const ResultsPage: React.FC = () => {
               />
             </>
           ) : (
-            <Paragraph className="text-center">Brak zapisanej historii gier.</Paragraph>
+            <Paragraph className="text-center">{t('no_history')}</Paragraph>
           )}
         </main>
       </PageCard>

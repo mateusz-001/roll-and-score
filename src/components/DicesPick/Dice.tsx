@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/utils';
 
@@ -12,10 +13,12 @@ interface Props {
 }
 
 export const Dice: React.FC<Props> = ({ index, selectedDices, handleSetDices }) => {
+  const { t } = useTranslation('game');
+
   return (
     <React.Fragment key={index}>
       <Paragraph size="small" className="italic">
-        {index + 1} kość:
+        {t('dice_index', { index: index + 1 })}:
       </Paragraph>
       <div className="flex gap-2 overflow-y-visible px-1 md:gap-3 lg:gap-4">
         {Array.from({ length: MAX_DICE_VALUE }, (_, i) => i + 1).map(face => {
@@ -28,7 +31,7 @@ export const Dice: React.FC<Props> = ({ index, selectedDices, handleSetDices }) 
               type="button"
               onClick={() => handleSetDices(index, face)}
               aria-pressed={isSelected}
-              aria-label={`Ustaw kość ${index + 1} na ${face}`}
+              aria-label={t('dice_aria_label', { index: index + 1, value: face })}
               className={cn(
                 'p-1 rounded-md transition-transform duration-150 md:p-2',
                 'focus:outline-none focus:ring-2 focus:ring-primary',

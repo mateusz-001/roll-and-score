@@ -1,0 +1,10 @@
+{
+  "header": "Game History",
+  "subtitle": "Congratulations to the winners of previous games!",
+  "subtitle_2": "You just got lucky anyway",
+  "game": "Game",
+  "date": "Date",
+  "no_history": "No saved game history.",
+  "first_throw": "By hand",
+  "points": "pts"
+}

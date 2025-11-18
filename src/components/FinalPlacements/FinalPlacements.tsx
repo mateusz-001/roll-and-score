@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/Button';
 import { Heading } from '@/components/Heading';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const FinalPlacements: React.FC<Props> = ({ placement }) => {
+  const { t } = useTranslation(['game', 'common']);
   const { saveAndReset } = useGameStore();
   const { burst } = useConfetti();
 
@@ -31,11 +33,11 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
     return (
       <div className="flex flex-col items-center gap-3 min-h-full md:gap-4 lg:gap-6">
         <Heading level="h2" className="mb-3 text-center text-primary">
-          Koniec gry!
+          {t('game:end_of_game')}
         </Heading>
-        <Paragraph>Brak danych o wynikach.</Paragraph>
+        <Paragraph>{t('game:no_results')}</Paragraph>
         <Button variant="primary" size="lg" onClick={saveAndReset}>
-          Zapisz i wyjdź
+          {t('common:buttons.save_exit')}
         </Button>
       </div>
     );
@@ -45,9 +47,9 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
     <div className="flex flex-col items-center gap-3 min-h-full md:gap-4 lg:gap-6">
       <header className="text-center">
         <Heading level="h2" className="mb-3 text-primary">
-          Koniec gry!
+          {t('game:end_of_game')}
         </Heading>
-        <Heading level="h4">Zobacz ostateczne wyniki</Heading>
+        <Heading level="h4">{t('game:results')}</Heading>
       </header>
 
       <ul className="w-full max-w-[400px]">
@@ -57,7 +59,7 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
       </ul>
 
       <Button className="mt-3 md:mt-4 lg:mt-6" variant="primary" size="lg" onClick={saveAndReset}>
-        Zapisz i wyjdź
+        {t('common:buttons.save_exit')}
       </Button>
     </div>
   );

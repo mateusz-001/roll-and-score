@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { AvailableTop, cn } from '@/utils';
+import { AvailableTop, camelToSnakeCase, cn } from '@/utils';
 
 import { RadioItem } from '../Radio';
 
@@ -18,6 +19,8 @@ export const ItemTop: React.FC<Props> = ({
   selectedCombination,
   index,
 }) => {
+  const { t } = useTranslation('game');
+
   return (
     <motion.li
       key={combination.combination}
@@ -38,7 +41,8 @@ export const ItemTop: React.FC<Props> = ({
         checked={selectedCombination === combination.combination}
         label={
           <div>
-            <span>{combination.combination.toUpperCase()}</span>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <span>{t(`combos.${camelToSnakeCase(combination.combination)}` as any)}</span>
             {combination.bonusPoints !== 0 && (
               <span
                 className={cn(

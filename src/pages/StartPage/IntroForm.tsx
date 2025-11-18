@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Dices, Plus, Trash } from 'lucide-react';
 import React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { redirect } from 'react-router-dom';
 
 import { AnimationFormScale } from '@/components/Animations';
@@ -24,6 +25,8 @@ interface Props {
 }
 
 export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
+  const { t } = useTranslation(['start', 'common']);
+
   const initializeGame = useGameStore(state => state.initializeGame);
 
   const methods = useForm<FormValues>({
@@ -72,9 +75,9 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
 
   return (
     <AnimationFormScale>
-      <Heading level="h2">Rejestracja graczy</Heading>
+      <Heading level="h2">{t('start:players_registration')}</Heading>
       <Paragraph size="small" className="italic !text-xs mt-1 md:mt-2">
-        Dodaj od {MIN_PLAYERS} do {MAX_PLAYERS} graczy.
+        {t('start:players_add', { min: MIN_PLAYERS, max: MAX_PLAYERS })}
       </Paragraph>
 
       <FormProvider {...methods}>
@@ -88,10 +91,10 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
                 <Input
                   name={`players.${index}.name`}
                   control={control}
-                  label={`Nazwa Gracza ${index + 1}`}
-                  placeholder={`Nazwa gracza ${index + 1}`}
+                  label={t('common:inputs.player_name.label', { number: index + 1 })}
+                  placeholder={t('common:inputs.player_name.label', { number: index + 1 })}
                   required
-                  rules={{ required: 'Nazwa gracza jest wymagana' }}
+                  rules={{ required: t('common:inputs.player_name.required') }}
                 />
                 <Button
                   type="button"
@@ -99,7 +102,9 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
                   size="sm"
                   onClick={() => handleRemove(index)}
                   disabled={!canRemove}
-                  title={!canRemove ? `Minimalna liczba graczy to ${MIN_PLAYERS}` : undefined}
+                  title={
+                    !canRemove ? t('common:buttons.min_players', { min: MIN_PLAYERS }) : undefined
+                  }
                 >
                   <Trash className="h-5 w-5" />
                 </Button>
@@ -113,19 +118,19 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
               className="w-min ml-auto mt-1"
               onClick={handleAdd}
               disabled={!canAdd}
-              title={!canAdd ? `Maksymalna liczba graczy to ${MAX_PLAYERS}` : undefined}
+              title={!canAdd ? t('common:buttons.max_players', { max: MAX_PLAYERS }) : undefined}
             >
-              Dodaj <Plus className="ml-2 h-5 w-5" />
+              {t('common:buttons.add')} <Plus className="ml-2 h-5 w-5" />
             </Button>
           </div>
 
           <div className="mt-4 flex justify-between items-center md:mt-6">
             <Button size="md" variant="ghost" type="button" onClick={handleSetShowForm}>
               <ArrowLeft className="mr-2 h-5 w-5" />
-              Powrót
+              {t('common:buttons.back')}
             </Button>
             <Button size="md" variant="primary" type="submit" disabled={!isValid}>
-              Rozpocznij grę
+              {t('common:buttons.start_game')}
               <Dices className="ml-2 h-5 w-5" />
             </Button>
           </div>

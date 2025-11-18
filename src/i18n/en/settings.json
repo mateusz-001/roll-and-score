@@ -1,0 +1,12 @@
+{
+  "header": "Settings",
+  "description": "Page for setting the language, resetting the game or game history.",
+  "change_language": "Change Language",
+  "reset_game": "Reset Game",
+  "reset_history": "Reset Game History",
+  "reset_history_subtitle": "This action cannot be undone.",
+  "confirm_reset_game": "Are you sure you want to reset the current game?",
+  "confirm_reset_history": "Are you sure you want to reset the game history?",
+  "english": "English",
+  "polish": "Polish"
+}

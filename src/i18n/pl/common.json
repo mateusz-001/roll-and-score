@@ -1,5 +1,28 @@
 {
-  "nav": { "start": "Start", "game": "Gra", "results": "Wyniki", "hof": "Hall of Fame" },
-  "start": { "title": "Rozpocznij grę" },
-  "actions": { "startGame": "Start", "finishGame": "Zakończ grę" }
+  "nav": {
+    "home": "Start",
+    "game": "Gra",
+    "results": "Wyniki",
+    "hof": "Hall of Fame",
+    "settings": "Ustawienia"
+  },
+  "buttons": {
+    "start_game": "Rozpocznij grę",
+    "back": "Powrót",
+    "add": "Dodaj",
+    "clear_history": "Wyczyść historię gier",
+    "reset_game": "Zresetuj grę",
+    "finish_game": "Zakończ grę",
+    "next_player": "Przejdź do następnego gracza",
+    "next_round": "Następna runda",
+    "save_exit": "Zapisz i wyjdź",
+    "min_players": "Minimalna liczba graczy to {{min}}",
+    "max_players": "Maksymalna liczba graczy to {{max}}"
+  },
+  "inputs": {
+    "player_name": {
+      "label": "Nazwa gracza {{number}}",
+      "required": "Nazwa gracza jest wymagana"
+    }
+  }
 }

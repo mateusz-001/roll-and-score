@@ -1,0 +1,12 @@
+{
+  "header": "Ustawienia",
+  "description": "Strona słuąca do ustawiania języka, resetowania gry lub historii gier.",
+  "change_language": "Zmień język",
+  "reset_game": "Resetuj grę",
+  "reset_history": "Resetuj historię gier",
+  "reset_history_subtitle": "Operacji tej nie można cofnąć.",
+  "confirm_reset_game": "Czy na pewno chcesz zresetować bieżącą grę?",
+  "confirm_reset_history": "Czy na pewno chcesz zresetować historię gier?",
+  "english": "Angielski",
+  "polish": "Polski"
+}

@@ -1,0 +1,8 @@
+{
+  "roll": "Roll",
+  "score": "Score",
+  "repeat": "Repeat",
+  "description": "Zapisuj wyniki gry w kości z rodziną i znajomymi — bez papieru, bez chaosu, z pełnym vibe’em. Prosty scoreboard z lokalnym zapisem i czytelnym UI.",
+  "players_registration": "Rejestracja graczy",
+  "players_add": "Dodaj od {{min}} do {{max}} graczy"
+}
