@@ -49,8 +49,14 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
     finishGame,
   });
 
+  console.log(game);
+
   const playersCount = game.players.length;
   const hasPlayers = playersCount > 0;
+
+  const lastPlayerId = game.players[playersCount - 1].id;
+  const isLastPlayerActive = game.activePlayer.id === lastPlayerId;
+  const isLastRound = game.maxRounds === game.round;
 
   const nextPlayerName = hasNextPlayer ? game.players[game.activePlayer.index + 1].name : null;
 
@@ -92,7 +98,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
       isFirstThrow,
     });
 
-    if (result === 'finished') {
+    if (result === 'finished' || (isLastPlayerActive && isLastRound)) {
       setShowFinalResults(true);
 
       return;
@@ -106,12 +112,6 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
   React.useEffect(() => {
     setSelectedCombination(null);
   }, [availableCombinations.top, availableCombinations.bottom]);
-
-  React.useEffect(() => {
-    if (game.round === game.maxRounds && !hasNextPlayer) {
-      setShowFinalResults(true);
-    }
-  }, [game.round, game.maxRounds, hasNextPlayer]);
 
   return (
     <PageWrapper className="relative h-screen">

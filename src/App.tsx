@@ -5,7 +5,6 @@ import { Navigation } from './components/Navigation';
 import { PageTransition } from './components/PageTransition';
 import { GamePage } from './pages/GamePage';
 import { HallOfFamePage } from './pages/HallOfFamePage';
-import { ResetPage } from './pages/ResetPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StartPage } from './pages/StartPage';

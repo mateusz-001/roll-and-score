@@ -10,5 +10,6 @@ export const recalcBottom = (player: Player) => {
     bottom.combinations.smallStraight.score +
     bottom.combinations.largeStraight.score +
     bottom.combinations.poker.score +
+    bottom.combinations.quadruple.score +
     bottom.combinations.chance.score;
 };

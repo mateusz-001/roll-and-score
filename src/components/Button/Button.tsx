@@ -69,6 +69,20 @@ export const Button = React.forwardRef<HTMLButtonElement, AnimatedButtonProps>(
     const damping = spring?.damping ?? 36;
     const mass = spring?.mass ?? 0.6;
 
+    const handleTap = boopOnTap
+      ? async () => {
+          await controls.start({
+            scale: [1, 0.92, 1.04, 1],
+            transition: {
+              type: 'tween',
+              duration: 0.25,
+              ease: 'easeOut',
+              times: [0, 0.35, 0.7, 1],
+            },
+          });
+        }
+      : undefined;
+
     return (
       <motion.button
         ref={ref}
@@ -86,27 +100,12 @@ export const Button = React.forwardRef<HTMLButtonElement, AnimatedButtonProps>(
             ? { y: -1, transition: { type: 'spring', duration: 0.6, stiffness, damping, mass } }
             : undefined
         }
-        whileTap={{
-          scale: 0.8,
-          transition: { type: 'spring', duration: 0.6, stiffness, damping, mass },
-        }}
-        onTap={
+        whileTap={
           boopOnTap
-            ? async () => {
-                await controls.start({
-                  scale: [0.8, 1.06, 0.85, 1],
-                  transition: {
-                    type: 'spring',
-                    stiffness: 460,
-                    damping: 24,
-                    mass: 0.7,
-                    times: [0, 0.45, 0.75, 1],
-                    duration: 0.6,
-                  },
-                });
-              }
-            : undefined
+            ? undefined
+            : { scale: 0.92, transition: { type: 'spring', stiffness, damping, mass } }
         }
+        onTap={handleTap}
         {...props}
       >
         {isLoading ? (
