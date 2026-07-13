@@ -70,7 +70,7 @@ export const evaluateTop = ({
 
       results.push({
         combination: k,
-        score: face,
+        score,
         bonusPoints: gainedBonus,
         effectiveValue: score + gainedBonus,
       });

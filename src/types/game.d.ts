@@ -1,5 +1,7 @@
 import { Player } from './player';
 
+export type CombinationSelectionMode = 'score' | 'crossOut';
+
 interface Game {
   id: number | string;
   players: Player[];

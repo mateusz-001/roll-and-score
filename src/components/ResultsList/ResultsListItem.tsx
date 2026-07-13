@@ -19,7 +19,8 @@ export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
   const { t } = useTranslation('results');
 
   const { id, startedAt, endedAt, placement } = game;
-  const firstPlace = placement && placement.length > 0 ? placement[0] : null;
+  const winningScore = placement[0]?.score;
+  const winners = placement.filter(player => player.score === winningScore);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -50,15 +51,15 @@ export const ResultsListItem: React.FC<Props> = ({ game, index }) => {
             </Paragraph>
           </div>
 
-          {placement && placement.length > 0 && (
+          {winners.length > 0 && (
             <div className="flex items-center gap-3">
-              <Paragraph>🏆 {firstPlace?.name}</Paragraph>
+              <Paragraph>🏆 {winners.map(player => player.name).join(', ')}</Paragraph>
               <Paragraph
                 as="span"
                 size="small"
                 className="flex items-center px-1 !text-green-500 bg-green-100 font-semibold rounded-sm"
               >
-                {firstPlace?.score} {t('points')}
+                {winningScore} {t('points')}
               </Paragraph>
             </div>
           )}

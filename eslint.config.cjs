@@ -5,6 +5,9 @@ const globals = require('globals');
 
 module.exports = tseslint.config(
   {
+    ignores: ['dist/**'],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tseslint.parser,

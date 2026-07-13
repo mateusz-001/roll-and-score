@@ -90,7 +90,7 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
               </span>
             </div>
 
-            <SectionHeader label="Góra" score={activePlayer.game.top.score} />
+            <SectionHeader label={t('top')} score={activePlayer.game.top.score} />
             <ul className="px-2 flex flex-col gap-y-1">
               {TOP_COMBINATIONS.map(({ key }) => {
                 const combo = activePlayer.game.top.combinations[key];
@@ -104,13 +104,18 @@ export const ResultsTabs: React.FC<Props> = ({ placement, players }) => {
                     key={key}
                     label={key}
                     combo={combo}
+                    showScore={combo.isPassed === true}
                     showBonus={showBonus ? true : false}
                   />
                 );
               })}
             </ul>
 
-            <SectionHeader label="Dół" score={activePlayer.game.bottom.score} className="mt-6" />
+            <SectionHeader
+              label={t('bottom')}
+              score={activePlayer.game.bottom.score}
+              className="mt-6"
+            />
             <ul className="px-2 flex flex-col gap-y-1 mb-2">
               {BOTTOM_COMBINATIONS.map(({ key }) => {
                 const combo = activePlayer.game.bottom.combinations[key];

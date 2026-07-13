@@ -6,17 +6,18 @@ import { useGameStore } from '@/store/gameStore';
 export const RequireNoGame: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const game = useGameStore(s => s.game);
+  const hasHydrated = useGameStore(s => s.hasHydrated);
   const loadFromStorage = useGameStore(s => s.loadFromStorage);
 
   React.useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    if (!hasHydrated) loadFromStorage();
+  }, [hasHydrated, loadFromStorage]);
 
   React.useEffect(() => {
-    if (game && !game.isFinished) navigate('/game', { replace: true });
-  }, [game, navigate]);
+    if (hasHydrated && game) navigate('/game', { replace: true });
+  }, [game, hasHydrated, navigate]);
 
-  if (game && !game.isFinished) return null;
+  if (!hasHydrated || game) return null;
 
   return <>{children}</>;
 };

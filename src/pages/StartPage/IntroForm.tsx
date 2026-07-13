@@ -4,7 +4,7 @@ import { ArrowLeft, Dices, Plus, Trash } from 'lucide-react';
 import React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { AnimationFormScale } from '@/components/Animations';
 import { Button } from '@/components/Button';
@@ -26,6 +26,7 @@ interface Props {
 
 export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
   const { t } = useTranslation(['start', 'common']);
+  const navigate = useNavigate();
 
   const initializeGame = useGameStore(state => state.initializeGame);
 
@@ -58,7 +59,7 @@ export const IntroForm: React.FC<Props> = ({ handleSetShowForm }) => {
 
     initializeGame(payload);
     reset();
-    redirect('game');
+    navigate('/game');
   };
 
   const handleAdd = () => {

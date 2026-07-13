@@ -1,6 +1,10 @@
 export const getGameDuration = (startedAt: string, endedAt: string): string => {
-  console.log(startedAt, endedAt);
-  const durationMs = new Date(endedAt).getTime() - new Date(startedAt).getTime();
+  const startMs = new Date(startedAt).getTime();
+  const endMs = new Date(endedAt).getTime();
+
+  if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs < startMs) return '—';
+
+  const durationMs = endMs - startMs;
 
   const hours = Math.floor(durationMs / (1000 * 60 * 60));
   const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));

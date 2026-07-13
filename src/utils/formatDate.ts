@@ -1,5 +1,13 @@
 export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('pl-PL', {
+  const date = new Date(dateString);
+
+  if (!Number.isFinite(date.getTime())) return '—';
+
+  const lang =
+    typeof window !== 'undefined' ? window.localStorage.getItem('rollnscore:lang') : null;
+  const locale = lang === 'pl' ? 'pl-PL' : lang === 'en' ? 'en-US' : undefined;
+
+  return date.toLocaleDateString(locale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

@@ -17,11 +17,16 @@ interface Props {
 
 export const FinalPlacements: React.FC<Props> = ({ placement }) => {
   const { t } = useTranslation(['game', 'common']);
-  const { saveAndReset } = useGameStore();
+  const saveAndReset = useGameStore(state => state.saveAndReset);
   const { burst } = useConfetti();
+  const [saveError, setSaveError] = React.useState(false);
 
   const rankedPlayers = React.useMemo(() => buildRankedPlayers(placement), [placement]);
   const playersCount = rankedPlayers.length;
+
+  const handleSaveAndReset = () => {
+    setSaveError(!saveAndReset());
+  };
 
   React.useEffect(() => {
     const timer = setTimeout(() => burst(), 300);
@@ -36,7 +41,8 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
           {t('game:end_of_game')}
         </Heading>
         <Paragraph>{t('game:no_results')}</Paragraph>
-        <Button variant="primary" size="lg" onClick={saveAndReset}>
+        {saveError ? <Paragraph className="text-red-500">{t('game:save_failed')}</Paragraph> : null}
+        <Button variant="primary" size="lg" onClick={handleSaveAndReset}>
           {t('common:buttons.save_exit')}
         </Button>
       </div>
@@ -58,7 +64,13 @@ export const FinalPlacements: React.FC<Props> = ({ placement }) => {
         ))}
       </ul>
 
-      <Button className="mt-3 md:mt-4 lg:mt-6" variant="primary" size="lg" onClick={saveAndReset}>
+      {saveError ? <Paragraph className="text-red-500">{t('game:save_failed')}</Paragraph> : null}
+      <Button
+        className="mt-3 md:mt-4 lg:mt-6"
+        variant="primary"
+        size="lg"
+        onClick={handleSaveAndReset}
+      >
         {t('common:buttons.save_exit')}
       </Button>
     </div>
