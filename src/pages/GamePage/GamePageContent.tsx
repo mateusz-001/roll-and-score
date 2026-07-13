@@ -48,7 +48,6 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
     checkpoint,
   });
 
-  console.log(game);
 
   const playersCount = game.players.length;
   const hasPlayers = playersCount > 0;
