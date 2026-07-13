@@ -21,6 +21,7 @@ export type BottomKey =
   | 'largeStraight'
   | 'poker'
   | 'chance';
+export type CombinationKey = TopKey | BottomKey;
 
 export interface Player {
   id: number;

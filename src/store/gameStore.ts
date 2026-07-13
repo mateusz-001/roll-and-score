@@ -5,22 +5,33 @@ import { immer } from 'zustand/middleware/immer';
 import { Game } from '@/types/game';
 import { BottomCombination, BottomKey, TopCombination, TopKey } from '@/types/player';
 import { Throw } from '@/types/throw';
-import { createEmptyBottom, createEmptyTop, nowISO, recalcOverall, STORAGE } from '@/utils';
+import {
+  createEmptyBottom,
+  createEmptyTop,
+  nowISO,
+  readCurrentGameFromStorage,
+  readHistoryFromStorage,
+  recalcOverall,
+  STORAGE,
+  writeCurrentGameToStorage,
+  writeHistoryToStorage,
+} from '@/utils';
 
 type CheckpointReason = 'registration' | 'turn' | 'round' | 'manual' | 'unload' | 'finish';
 
 type GameState = {
   game: Game | null;
+  hasHydrated: boolean;
   lastThrows: Throw[];
 };
 
 type GameActions = {
   initializeGame: (players: { id: number; name: string }[]) => void;
   loadFromStorage: () => void;
-  resetGame: () => void;
+  resetGame: () => boolean;
   nextRound: () => void;
   finishGame: () => void;
-  saveAndReset: () => void;
+  saveAndReset: () => boolean;
   setActivePlayer: (index: number) => void;
   checkpoint: (why?: CheckpointReason) => void;
 
@@ -39,6 +50,7 @@ type GameActions = {
 export const useGameStore = create<GameState & GameActions>()(
   immer((set, get) => ({
     game: null,
+    hasHydrated: false,
     lastThrows: [],
 
     initializeGame(players) {
@@ -64,6 +76,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
       set(state => {
         state.game = newGame;
+        state.hasHydrated = true;
         state.lastThrows = [];
       });
 
@@ -72,36 +85,51 @@ export const useGameStore = create<GameState & GameActions>()(
 
     loadFromStorage() {
       try {
-        const savedData = localStorage.getItem(STORAGE.currentGame);
-        if (!savedData) return;
+        const savedGame = readCurrentGameFromStorage(STORAGE.currentGame);
 
-        const parsedGame: Game = JSON.parse(savedData);
         set(state => {
-          state.game = parsedGame;
+          state.game = savedGame;
+          state.hasHydrated = true;
         });
       } catch (error) {
         console.warn('Failed to load game from localStorage:', error);
+        set(state => {
+          state.game = null;
+          state.hasHydrated = true;
+        });
       }
     },
 
     setActivePlayer(index: number) {
       set(state => {
         if (!state.game) return;
+        const player = state.game.players[index];
+        if (!player) return;
 
         state.game.activePlayer = {
-          id: state.game.players[index].id,
-          name: state.game.players[index].name,
+          id: player.id,
+          name: player.name,
           index: index,
         };
       });
     },
 
     resetGame() {
+      try {
+        localStorage.removeItem(STORAGE.currentGame);
+      } catch (error) {
+        console.error('Failed to clear current game data:', error);
+
+        return false;
+      }
+
       set(state => {
         state.game = null;
+        state.hasHydrated = true;
         state.lastThrows = [];
       });
-      localStorage.removeItem(STORAGE.currentGame);
+
+      return true;
     },
 
     nextRound() {
@@ -109,8 +137,6 @@ export const useGameStore = create<GameState & GameActions>()(
         if (!state.game || state.game.isFinished) return;
         state.game.round += 1;
       });
-
-      get().checkpoint('round');
     },
 
     finishGame() {
@@ -119,6 +145,7 @@ export const useGameStore = create<GameState & GameActions>()(
         if (!currentGame) return;
 
         currentGame.endedAt = nowISO();
+        currentGame.isFinished = true;
 
         const sortedPlayers = [...currentGame.players].sort(
           (a, b) => b.game.overallScore - a.game.overallScore || a.name.localeCompare(b.name),
@@ -136,37 +163,35 @@ export const useGameStore = create<GameState & GameActions>()(
 
     saveAndReset() {
       const currentGame = get().game;
-      if (!currentGame) return;
+      if (!currentGame) return false;
 
       const finishedGame = {
         ...currentGame,
         endedAt: currentGame.endedAt ?? nowISO(),
+        isFinished: true,
       };
 
       try {
-        const storedHistory = localStorage.getItem(STORAGE.history);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const parsedHistory: any[] = storedHistory ? JSON.parse(storedHistory) : [];
-        const historyArray = Array.isArray(parsedHistory) ? parsedHistory : [];
-        const historyWithoutDuplicates = historyArray.filter(game => game?.id !== finishedGame.id);
+        const historyWithoutDuplicates = readHistoryFromStorage().filter(
+          game => game.id !== finishedGame.id,
+        );
 
         historyWithoutDuplicates.unshift(finishedGame);
-        localStorage.setItem(STORAGE.history, JSON.stringify(historyWithoutDuplicates));
-        currentGame.isFinished = true;
+        writeHistoryToStorage(historyWithoutDuplicates);
+        localStorage.removeItem(STORAGE.currentGame);
       } catch (error) {
         console.error('❌ Saving game history failed:', error);
+
+        return false;
       }
 
       set(state => {
         state.game = null;
+        state.hasHydrated = true;
         state.lastThrows = [];
       });
 
-      try {
-        localStorage.removeItem(STORAGE.currentGame);
-      } catch (error) {
-        console.error('⚠️ Failed to clear game data:', error);
-      }
+      return true;
     },
 
     setTopCell(playerId, key, data) {
@@ -203,7 +228,7 @@ export const useGameStore = create<GameState & GameActions>()(
       if (!game) return;
 
       try {
-        localStorage.setItem(STORAGE.currentGame, JSON.stringify(game));
+        writeCurrentGameToStorage(STORAGE.currentGame, game);
       } catch (error) {
         console.error(`Failed to save checkpoint (${why})`, error);
       }

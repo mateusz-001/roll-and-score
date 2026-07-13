@@ -25,7 +25,7 @@ export const HallOfFamePage: React.FC = () => {
     const timer = setTimeout(() => burst(), 300);
 
     return () => clearTimeout(timer);
-  }, [hasGames]);
+  }, [burst, hasGames]);
 
   if (!hasGames) {
     return (
@@ -49,12 +49,12 @@ export const HallOfFamePage: React.FC = () => {
     bottomSectionKing,
   } = stats!;
 
-  const hasHighestScoreEver = highestScoreEver?.gameDate !== null;
-  const hasLongestWinningStreak = longestWinningStreak?.streakLength !== null;
-  const hasMostBalancedGame = mostBalancedGame?.scoreDifference !== null;
-  const hasMostUnbalancedGame = mostUnbalancedGame?.scoreDifference !== null;
-  const hasTopSectionKing = topSectionKing?.playerName !== null;
-  const hasBottomSectionKing = bottomSectionKing?.playerName !== null;
+  const hasHighestScoreEver = Boolean(highestScoreEver);
+  const hasLongestWinningStreak = Boolean(longestWinningStreak);
+  const hasMostBalancedGame = Boolean(mostBalancedGame);
+  const hasMostUnbalancedGame = Boolean(mostUnbalancedGame);
+  const hasTopSectionKing = Boolean(topSectionKing);
+  const hasBottomSectionKing = Boolean(bottomSectionKing);
 
   return (
     <PageWrapper className="relative h-screen">
@@ -104,7 +104,7 @@ export const HallOfFamePage: React.FC = () => {
             >
               <Heading level="h5" color="text-primary" className="flex gap-2 justify-center">
                 <span className="!text-body-lg flex items-center px-1 rounded-sm bg-green-100 text-green-500 font-sans font-semibold">
-                  {t('difference')}: {mostBalancedGame?.scoreDifference} pkt
+                  {t('difference')}: {mostBalancedGame?.scoreDifference} {t('points')}
                 </span>
               </Heading>
               <Paragraph className="mt-1 text-center italic !text-body-sm">
@@ -133,10 +133,12 @@ export const HallOfFamePage: React.FC = () => {
               <Paragraph className="mt-1 text-center italic !text-body-sm">
                 {formatDate(mostUnbalancedGame?.gameDate ?? '')} <br />
                 {t('players_count')}:{' '}
-                <span className="text-primary font-semibold">{mostBalancedGame?.playersCount}</span>
+                <span className="text-primary font-semibold">
+                  {mostUnbalancedGame?.playersCount}
+                </span>
                 <br />
                 {t('winner')}:{' '}
-                <span className="text-primary font-semibold">{mostBalancedGame?.winnerName}</span>
+                <span className="text-primary font-semibold">{mostUnbalancedGame?.winnerName}</span>
               </Paragraph>
             </StatCard>
           )}

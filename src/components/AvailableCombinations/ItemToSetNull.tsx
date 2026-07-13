@@ -3,14 +3,15 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { CombinationKey } from '@/types/player';
 import { camelToSnakeCase } from '@/utils';
 
 import { RadioItem } from '../Radio';
 
 interface Props {
-  combination: string;
-  selectedCombination: string | null;
-  setSelectedCombination: (value: string | null) => void;
+  combination: CombinationKey;
+  selectedCombination: CombinationKey | null;
+  setSelectedCombination: (value: CombinationKey | null) => void;
   index: number;
 }
 
@@ -36,10 +37,18 @@ export const ItemToSetNull: React.FC<Props> = ({
       }}
     >
       <RadioItem
+        className="w-full pr-16"
         name="points-combination"
         value={combination}
-        label={<div>{t(`combos.${camelToSnakeCase(combination)}` as any)}</div>}
-        onCheckedChange={setSelectedCombination}
+        label={
+          <div>
+            <span>{t(`combos.${camelToSnakeCase(combination)}` as any)}</span>
+            <span className="absolute right-0 top-1/2 flex h-6 -translate-y-1/2 items-center rounded-sm bg-red-100 px-1 text-sm text-red-600">
+              <strong>0 {t('points')}</strong>
+            </span>
+          </div>
+        }
+        onCheckedChange={value => setSelectedCombination(value as CombinationKey)}
         checked={selectedCombination === combination}
       />
     </motion.li>

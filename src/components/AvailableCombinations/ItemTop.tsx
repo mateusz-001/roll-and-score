@@ -2,14 +2,15 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { CombinationKey } from '@/types/player';
 import { AvailableTop, camelToSnakeCase, cn } from '@/utils';
 
 import { RadioItem } from '../Radio';
 
 interface Props {
   combination: AvailableTop;
-  selectedCombination: string | null;
-  setSelectedCombination: (value: string | null) => void;
+  selectedCombination: CombinationKey | null;
+  setSelectedCombination: (value: CombinationKey | null) => void;
   index: number;
 }
 
@@ -35,9 +36,10 @@ export const ItemTop: React.FC<Props> = ({
       }}
     >
       <RadioItem
+        className="w-full"
         name="points-combination"
         value={combination.combination}
-        onCheckedChange={setSelectedCombination}
+        onCheckedChange={value => setSelectedCombination(value as CombinationKey)}
         checked={selectedCombination === combination.combination}
         label={
           <div>

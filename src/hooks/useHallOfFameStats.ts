@@ -115,20 +115,30 @@ const calculateLongestWinningStreak = (
 ): WinningStreakRecord | undefined => {
   if (games.length === 0) return undefined;
 
-  const winnerIdsPerGame: number[][] = games.map(game => {
+  const chronologicalGames = [...games].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
+  const winnersPerGame: NormalizedPlayer[][] = chronologicalGames.map(game => {
     const highestScore = Math.max(...game.players.map(p => p.totalScore));
 
-    return game.players.filter(p => p.totalScore === highestScore).map(p => p.id);
+    return game.players.filter(p => p.totalScore === highestScore);
   });
 
-  type StreakData = { current: number; best: number };
-  const streakByPlayerId = new Map<number, StreakData>();
+  type StreakData = {
+    current: number;
+    best: number;
+    playerId: number;
+    playerName: string;
+  };
+  const streakByPlayerName = new Map<string, StreakData>();
 
-  for (const winnerIds of winnerIdsPerGame) {
-    const currentWinners = new Set(winnerIds);
+  for (const winners of winnersPerGame) {
+    const currentWinnerNames = new Set(
+      winners.map(player => player.name.trim().toLocaleLowerCase()),
+    );
 
-    for (const [playerId, data] of streakByPlayerId.entries()) {
-      if (currentWinners.has(playerId)) {
+    for (const [normalizedName, data] of streakByPlayerName.entries()) {
+      if (currentWinnerNames.has(normalizedName)) {
         data.current += 1;
         if (data.current > data.best) data.best = data.current;
       } else {
@@ -136,33 +146,35 @@ const calculateLongestWinningStreak = (
       }
     }
 
-    for (const winnerId of currentWinners) {
-      if (!streakByPlayerId.has(winnerId)) {
-        streakByPlayerId.set(winnerId, { current: 1, best: 1 });
+    for (const winner of winners) {
+      const normalizedName = winner.name.trim().toLocaleLowerCase();
+
+      if (!streakByPlayerName.has(normalizedName)) {
+        streakByPlayerName.set(normalizedName, {
+          current: 1,
+          best: 1,
+          playerId: winner.id,
+          playerName: winner.name,
+        });
       }
     }
   }
 
-  let bestPlayerId: number | undefined;
+  let bestPlayer: StreakData | undefined;
   let bestStreakLength = 0;
 
-  for (const [playerId, { best }] of streakByPlayerId.entries()) {
-    if (best > bestStreakLength) {
-      bestStreakLength = best;
-      bestPlayerId = playerId;
+  for (const streak of streakByPlayerName.values()) {
+    if (streak.best > bestStreakLength) {
+      bestStreakLength = streak.best;
+      bestPlayer = streak;
     }
   }
 
-  if (!bestPlayerId || bestStreakLength <= 1) {
-    return undefined;
-  }
-
-  const anyGameWithPlayer = games.find(game => game.players.some(p => p.id === bestPlayerId));
-  const playerName = anyGameWithPlayer?.players.find(p => p.id === bestPlayerId)?.name ?? 'Unknown';
+  if (!bestPlayer || bestStreakLength <= 1) return undefined;
 
   return {
-    playerId: bestPlayerId,
-    playerName,
+    playerId: bestPlayer.playerId,
+    playerName: bestPlayer.playerName,
     streakLength: bestStreakLength,
   };
 };

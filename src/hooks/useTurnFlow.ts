@@ -1,9 +1,10 @@
 // useTurnFlow.ts
 import React from 'react';
 
-import type { AvailableCombinationsType } from '@/pages/GamePage/GamePageContent';
-import { Game } from '@/types/game';
-import { BottomKey, TopKey } from '@/types/player';
+import { CombinationSelectionMode, Game } from '@/types/game';
+import { BottomKey, CombinationKey, TopKey } from '@/types/player';
+
+import type { AvailableCombinations } from './useAvailableCombinations';
 
 interface TurnFlowDeps {
   setTopCell: (
@@ -19,12 +20,14 @@ interface TurnFlowDeps {
   setActivePlayer: (index: number) => void;
   nextRound: () => void;
   finishGame: () => void;
+  checkpoint: (why?: 'turn') => void;
 }
 
 interface GoToNextArgs {
-  selectedCombination: TopKey | BottomKey;
-  availableCombinations: AvailableCombinationsType;
+  selectedCombination: CombinationKey;
+  availableCombinations: AvailableCombinations;
   isFirstThrow: boolean;
+  selectionMode: CombinationSelectionMode;
 }
 
 export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
@@ -42,26 +45,23 @@ export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
       selectedCombination,
       availableCombinations,
       isFirstThrow,
+      selectionMode,
     }: GoToNextArgs): 'idle' | 'next' | 'finished' => {
       if (!hasPlayers || !selectedCombination) return 'idle';
 
-      const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame } = deps;
+      const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame, checkpoint } =
+        deps;
       const { game: activePlayerGame, id: activePlayerId } = activePlayerData;
-
-      const hasAvailableCombinations =
-        availableCombinations.top.length > 0 || availableCombinations.bottom.length > 0;
 
       const found = [...availableCombinations.top, ...availableCombinations.bottom].find(
         combo => combo.combination === selectedCombination,
       );
+      const isSelectedTopCombination = Object.prototype.hasOwnProperty.call(
+        activePlayerGame.top.combinations,
+        selectedCombination,
+      );
 
-      if (!hasAvailableCombinations) {
-        // 1:1 z Twoją starą logiką – skreślenie TYLKO gdy nic nie ma
-        const isSelectedTopCombination = Object.prototype.hasOwnProperty.call(
-          activePlayerGame.top.combinations,
-          selectedCombination,
-        );
-
+      if (selectionMode === 'crossOut') {
         if (isSelectedTopCombination) {
           setTopCell(activePlayerId, selectedCombination as TopKey, {
             score: 0,
@@ -76,11 +76,8 @@ export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
           });
         }
       } else {
-        // są dostępne kombinacje -> MUSI być found; jak nie ma, to bug w UI
         if (!found) {
-          console.warn(
-            '[Roll&Score] selectedCombination nie znaleziony w availableCombinations mimo hasAvailableCombinations = true',
-          );
+          console.warn('[Roll&Score] Selected scoring combination is not currently available.');
 
           return 'idle';
         }
@@ -114,6 +111,8 @@ export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
       } else {
         setActivePlayer(activePlayer.index + 1);
       }
+
+      checkpoint('turn');
 
       return 'next';
     },
