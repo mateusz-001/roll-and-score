@@ -62,7 +62,6 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
 
   const hasTopAvailable = availableCombinations.top.length > 0;
   const hasBottomAvailable = availableCombinations.bottom.length > 0;
-  const hasAvailableCombinations = hasTopAvailable || hasBottomAvailable;
 
   const combinationsCanBeSetToNull = findCanBeSetToNull({
     playerId: activePlayerData.id,
@@ -155,7 +154,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                   </Button>
                 </AnimationSlideUp>
               )}
-              {selectionMode === 'score' && hasAvailableCombinations && (
+              {selectionMode === 'score' && (
                 <MissingCombinations
                   availableCombinationsTop={combinationsCanBeSetToNull.top}
                   availableCombinationsBottom={combinationsCanBeSetToNull.bottom}
