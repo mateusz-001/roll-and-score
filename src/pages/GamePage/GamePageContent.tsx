@@ -11,17 +11,12 @@ import { PageCard } from '@/components/PageCard';
 import { PageWrapper } from '@/components/PageWrapper';
 import { useTurnFlow, useAvailableCombinations } from '@/hooks';
 import { useGameStore } from '@/store/gameStore';
-import { Game } from '@/types/game';
-import { BottomKey, TopKey } from '@/types/player';
-import { AvailableBottom, AvailableTop, findCanBeSetToNull } from '@/utils';
+import { CombinationSelectionMode, Game } from '@/types/game';
+import { CombinationKey } from '@/types/player';
+import { findCanBeSetToNull } from '@/utils';
 
 import { Header } from './Header';
 import { FinalPlacements } from '../../components/FinalPlacements/FinalPlacements';
-
-export type AvailableCombinationsType = {
-  top: AvailableTop[] | [];
-  bottom: AvailableBottom[] | [];
-};
 
 interface Props {
   game: Game;
@@ -38,11 +33,10 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
 
   const [showPoints, setShowPoints] = React.useState(false);
   const [isFirstThrow, setIsFirstThrow] = React.useState(false);
+  const [selectionMode, setSelectionMode] = React.useState<CombinationSelectionMode>('score');
 
   const [selectedDices, setSelectedDices] = React.useState<(number | null)[]>([]);
-  const [selectedCombination, setSelectedCombination] = React.useState<TopKey | BottomKey | null>(
-    null,
-  );
+  const [selectedCombination, setSelectedCombination] = React.useState<CombinationKey | null>(null);
   const filteredDices = selectedDices.filter((dice): dice is number => dice !== null);
 
   const { activePlayerData, isFinalRound, hasNextPlayer, goToNext } = useTurnFlow(game, {
@@ -56,10 +50,6 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
 
   const playersCount = game.players.length;
   const hasPlayers = playersCount > 0;
-
-  const lastPlayerId = game.players[playersCount - 1].id;
-  const isLastPlayerActive = game.activePlayer.id === lastPlayerId;
-  const isLastRound = game.maxRounds === game.round;
 
   const nextPlayerName = hasNextPlayer ? game.players[game.activePlayer.index + 1].name : null;
 
@@ -81,6 +71,10 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
 
   const handleToggleShowPoints = () => setShowPoints(prev => !prev);
   const handleToggleFirstThrow = () => setIsFirstThrow(prev => !prev);
+  const handleSelectionModeChange = (mode: CombinationSelectionMode) => {
+    setSelectionMode(mode);
+    setSelectedCombination(null);
+  };
 
   const handleSetDices = (diceIndex: number | null, value: number | null) => {
     setSelectedDices(prev => {
@@ -99,13 +93,15 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
       selectedCombination,
       availableCombinations,
       isFirstThrow,
+      selectionMode,
     });
 
-    if (result === 'finished' || (isLastPlayerActive && isLastRound)) return;
+    if (result === 'finished') return;
 
     setSelectedDices([]);
     setIsFirstThrow(false);
     setSelectedCombination(null);
+    setSelectionMode('score');
   };
 
   React.useEffect(() => {
@@ -137,8 +133,10 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                     availableCombinations={availableCombinations}
                     hasTopAvailable={hasTopAvailable}
                     hasBottomAvailable={hasBottomAvailable}
+                    selectionMode={selectionMode}
+                    onSelectionModeChange={handleSelectionModeChange}
                     selectedCombination={selectedCombination}
-                    setSelectedCombination={setSelectedCombination as () => void}
+                    setSelectedCombination={setSelectedCombination}
                     bonusPoints={activePlayerData.game.top.bonus || 0}
                     combinationsCanBeSetToNull={combinationsCanBeSetToNull}
                   />
@@ -157,7 +155,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                   </Button>
                 </AnimationSlideUp>
               )}
-              {hasAvailableCombinations && (
+              {selectionMode === 'score' && hasAvailableCombinations && (
                 <MissingCombinations
                   availableCombinationsTop={combinationsCanBeSetToNull.top}
                   availableCombinationsBottom={combinationsCanBeSetToNull.bottom}
