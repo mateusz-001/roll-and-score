@@ -19,6 +19,7 @@ interface TurnFlowDeps {
   setActivePlayer: (index: number) => void;
   nextRound: () => void;
   finishGame: () => void;
+  checkpoint: (why?: 'turn') => void;
 }
 
 interface GoToNextArgs {
@@ -45,7 +46,8 @@ export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
     }: GoToNextArgs): 'idle' | 'next' | 'finished' => {
       if (!hasPlayers || !selectedCombination) return 'idle';
 
-      const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame } = deps;
+      const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame, checkpoint } =
+        deps;
       const { game: activePlayerGame, id: activePlayerId } = activePlayerData;
 
       const hasAvailableCombinations =
@@ -114,6 +116,8 @@ export function useTurnFlow(game: Game, deps: TurnFlowDeps) {
       } else {
         setActivePlayer(activePlayer.index + 1);
       }
+
+      checkpoint('turn');
 
       return 'next';
     },

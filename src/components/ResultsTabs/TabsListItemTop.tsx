@@ -13,10 +13,11 @@ interface Props {
     bonus: number;
     score: number;
   };
+  showScore?: boolean;
   showBonus?: boolean;
 }
 
-export const TabsListItemTop: React.FC<Props> = ({ label, combo, showBonus }) => {
+export const TabsListItemTop: React.FC<Props> = ({ label, combo, showScore, showBonus }) => {
   const { t } = useTranslation('game');
 
   const hasBonusPositive = combo.bonus && combo.bonus > 0;
@@ -31,16 +32,23 @@ export const TabsListItemTop: React.FC<Props> = ({ label, combo, showBonus }) =>
         <span className="text-body-xs">{passedLabel}</span>
       </div>
 
-      {showBonus && (
-        <span
-          className={cn(
-            'flex items-center justify-center h-6 px-1 rounded-sm text-sm',
-            hasBonusPositive ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500',
-          )}
-        >
-          <strong>{hasBonusPositive ? `+${combo.bonus}` : combo.bonus}</strong>
-        </span>
-      )}
+      <div className="flex items-center gap-1">
+        {showScore && (
+          <span className="flex items-center justify-center h-6 px-1 rounded-sm text-sm bg-green-100 text-green-500">
+            <strong>{combo.score}</strong>
+          </span>
+        )}
+        {showBonus && (
+          <span
+            className={cn(
+              'flex items-center justify-center h-6 px-1 rounded-sm text-sm',
+              hasBonusPositive ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500',
+            )}
+          >
+            <strong>{hasBonusPositive ? `+${combo.bonus}` : combo.bonus}</strong>
+          </span>
+        )}
+      </div>
     </li>
   );
 };

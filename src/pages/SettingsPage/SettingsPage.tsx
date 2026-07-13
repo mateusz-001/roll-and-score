@@ -1,36 +1,43 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { AnimationSlideUp } from '@/components/Animations';
 import { Button } from '@/components/Button';
 import { PageCard } from '@/components/PageCard';
 import { PageWrapper } from '@/components/PageWrapper';
 import { RadioGroup, RadioItem } from '@/components/Radio';
+import { useGameStore } from '@/store/gameStore';
+import { removeFromLocalStorage, STORAGE } from '@/utils';
 
 import { Header } from './Header';
 import { Paragraph } from '../../components/Paragraph/Paragraph';
 
 export const SettingsPage: React.FC = () => {
-  const { t } = useTranslation('settings');
+  const { i18n, t } = useTranslation('settings');
+  const navigate = useNavigate();
+  const resetGame = useGameStore(state => state.resetGame);
 
-  const [language, setLanguage] = React.useState<string>(
-    localStorage.getItem('rollnscore:lang') || 'pl',
+  const [language, setLanguage] = React.useState<string>(() =>
+    i18n.resolvedLanguage?.startsWith('pl') ? 'pl' : 'en',
   );
 
   const handleSwitchLanguage = (lang: string) => {
     setLanguage(lang);
     localStorage.setItem('rollnscore:lang', lang);
-    window.location.reload();
+    void i18n.changeLanguage(lang);
   };
 
   const handleResetGame = () => {
-    localStorage.removeItem('rs:currentGame');
-    window.location.reload();
+    if (!window.confirm(t('confirm_reset_game'))) return;
+
+    if (resetGame()) navigate('/');
   };
 
   const handleResetHistory = () => {
-    localStorage.removeItem('rs:history');
-    window.location.reload();
+    if (!window.confirm(t('confirm_reset_history'))) return;
+
+    removeFromLocalStorage(STORAGE.history);
   };
 
   return (
@@ -67,7 +74,7 @@ export const SettingsPage: React.FC = () => {
                 {t('reset_game')}
               </Paragraph>
               <Button variant="danger" size="md" className="w-[200px]" onClick={handleResetGame}>
-                Reset
+                {t('reset_game')}
               </Button>
             </div>
           </AnimationSlideUp>
@@ -80,7 +87,7 @@ export const SettingsPage: React.FC = () => {
                 {t('reset_history_subtitle')}
               </Paragraph>
               <Button variant="danger" size="md" className="w-[200px]" onClick={handleResetHistory}>
-                Reset
+                {t('reset_history')}
               </Button>
             </div>
           </AnimationSlideUp>

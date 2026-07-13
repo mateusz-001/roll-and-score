@@ -29,9 +29,13 @@ interface Props {
 
 export const GamePageContent: React.FC<Props> = ({ game }) => {
   const { t } = useTranslation('common');
-  const { setTopCell, setBottomCell, setActivePlayer, nextRound, finishGame } = useGameStore();
+  const setTopCell = useGameStore(state => state.setTopCell);
+  const setBottomCell = useGameStore(state => state.setBottomCell);
+  const setActivePlayer = useGameStore(state => state.setActivePlayer);
+  const nextRound = useGameStore(state => state.nextRound);
+  const finishGame = useGameStore(state => state.finishGame);
+  const checkpoint = useGameStore(state => state.checkpoint);
 
-  const [showFinalResults, setShowFinalResults] = React.useState(false);
   const [showPoints, setShowPoints] = React.useState(false);
   const [isFirstThrow, setIsFirstThrow] = React.useState(false);
 
@@ -47,9 +51,8 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
     setActivePlayer,
     nextRound,
     finishGame,
+    checkpoint,
   });
-
-  console.log(game);
 
   const playersCount = game.players.length;
   const hasPlayers = playersCount > 0;
@@ -98,11 +101,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
       isFirstThrow,
     });
 
-    if (result === 'finished' || (isLastPlayerActive && isLastRound)) {
-      setShowFinalResults(true);
-
-      return;
-    }
+    if (result === 'finished' || (isLastPlayerActive && isLastRound)) return;
 
     setSelectedDices([]);
     setIsFirstThrow(false);
@@ -116,7 +115,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
   return (
     <PageWrapper className="relative h-screen">
       <PageCard>
-        {!showFinalResults && (
+        {!game.isFinished && (
           <>
             <Header
               currentPlayerName={activePlayerData.name || '-'}
@@ -152,7 +151,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
                   >
                     {isFinalRound && !hasNextPlayer
                       ? t('buttons.finish_game')
-                      : hasNextPlayer && !isFinalRound
+                      : hasNextPlayer
                         ? t('buttons.next_player')
                         : t('buttons.next_round')}
                   </Button>
@@ -168,7 +167,7 @@ export const GamePageContent: React.FC<Props> = ({ game }) => {
           </>
         )}
         <AnimatePresence mode="wait">
-          {showFinalResults && (
+          {game.isFinished && (
             <AnimationSlideUp>
               <FinalPlacements placement={game.placement} />
             </AnimationSlideUp>

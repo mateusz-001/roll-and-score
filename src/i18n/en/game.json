@@ -19,6 +19,7 @@
   "end_of_game": "End of game",
   "no_results": "No result data available",
   "results": "View final results",
+  "save_failed": "The game could not be saved. Your current game is still available; free some browser storage and try again.",
   "combos": {
     "pair": "Pair",
     "double_pair": "Two Pairs",

@@ -19,6 +19,7 @@
   "end_of_game": "Koniec gry",
   "no_results": "Brak danych o wynikach",
   "results": "Zobacz ostateczne wyniki",
+  "save_failed": "Nie udało się zapisać gry. Bieżąca gra nadal jest dostępna; zwolnij miejsce w pamięci przeglądarki i spróbuj ponownie.",
   "combos": {
     "pair": "Para",
     "double_pair": "Dwie pary",

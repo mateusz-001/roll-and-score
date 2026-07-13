@@ -1,5 +1,9 @@
 export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('pl-PL', {
+  const date = new Date(dateString);
+
+  if (!Number.isFinite(date.getTime())) return '—';
+
+  return date.toLocaleDateString(undefined, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
